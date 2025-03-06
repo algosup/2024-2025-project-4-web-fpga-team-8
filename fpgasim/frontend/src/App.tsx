@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { Container, Typography } from "@mui/material";
+import FileSelector from "./components/FileSelector";
+import FPGALayout from "./components/FPGALayout";
 
-function App() {
-  const [count, setCount] = useState(0);
-
+function App(): React.JSX.Element {
   return (
-    <div>
-      <h1>FPGA Simulator Interface</h1>
-      <p>Welcome to the FPGA visualization tool!</p>
-      <button onClick={() => setCount(count + 1)}>Count: {count}</button>
-    </div>
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        FPGA Simulator Interface
+      </Typography>
+      <FileSelector />
+      <FPGALayout />
+    </Container>
   );
 }
 
