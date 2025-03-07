@@ -1,6 +1,6 @@
 name: Task
 description: Use this template to create a new task.
-title: "[Task]: "
+title: "[Task]:"
 labels: ["task"]
 body:
   - type: markdown
