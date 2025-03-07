@@ -65,8 +65,25 @@ To maintain consistency across the project, the following writing conventions wi
 
 The project will be organized into the following folder structure:
 
-[WIP]
+```
+~ 2024-2025-project-4-web-fpga-team-8
 
+README.md
+documents/
+│── functional/
+│   ├── functionalSpecification.md
+│── management/
+│   ├── weekly_reports/
+│   │   ├── weeklyReport<nb>.md  # Replace <nb> with report number
+│   ├── raciMatrix.pdf
+│── technical/
+│   ├── technicalSpecification.md
+fpgasim/
+│  │── frontend/
+│  │── backend/
+│    │── uploads/
+
+```
 
 ## 4. Technologies
 
