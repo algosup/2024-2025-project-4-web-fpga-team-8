@@ -41,8 +41,8 @@ As of now, we are still on schedule. However, we must remain vigilant and take p
 
 ## 4. Absenteeism Report
 
-- **24/02:** **Mariem ZAIANE**, **Pavlo PRENDI**  
-- **25/02:** **Mariem ZAIANE**  
+- **24/02: Mariem ZAIANE, Pavlo PRENDI**  
+- **25/02: Mariem ZAIANE**  
 
 ## 5. Scope Status
 
