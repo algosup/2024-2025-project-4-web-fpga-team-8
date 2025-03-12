@@ -1,0 +1,12 @@
+{
+    "module": "RisingEdge_DFlipFlop_AsyncResetHigh",
+    "inputs": [
+        "clk",
+        "async_reset",
+        "D"
+    ],
+    "outputs": [
+        "Q"
+    ],
+    "bel_type": "Flip-Flop"
+}

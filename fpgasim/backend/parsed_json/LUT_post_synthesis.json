@@ -1,0 +1,13 @@
+{
+    "module": "LUT",
+    "inputs": [
+        "I4",
+        "I2",
+        "I1",
+        "I3"
+    ],
+    "outputs": [
+        "O1"
+    ],
+    "bel_type": "LUT"
+}
