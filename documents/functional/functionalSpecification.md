@@ -20,6 +20,21 @@
     - [1.5. Project Plan](#15-project-plan)
       - [1.5.1. Planning](#151-planning)
       - [1.5.2. Milestones](#152-milestones)
+      - [1.5.3. Dependencies](#153-dependencies)
+      - [1.5.4. Assumptions/Constraints](#154-assumptionsconstraints)
+      - [1.5.5. Risks/Mitigation](#155-risksmitigation)
+  - [2. Personas and Use Cases](#2-personas-and-use-cases)
+    - [2.1. Personas](#21-personas)
+      - [2.1.1. Dr. Dawson](#211-dr-dawson)
+      - [2.1.2. Mr. Anderson](#212-mr-anderson)
+      - [2.1.3. Alex](#213-alex)
+      - [2.1.4. Sara](#214-sara)
+    - [2.2. Use Cases](#22-use-cases)
+  - [3. Functional Requirements](#3-functional-requirements)
+  - [4. Non-functional Requirements](#4-non-functional-requirements)
+    - [4.1.  Performance \& Scalability](#41--performance--scalability)
+    - [4.2. Usability \& Accessibility](#42-usability--accessibility)
+    - [4.3. Compatibility \& Maintainability](#43-compatibility--maintainability)
 
 </details>
 
@@ -143,5 +158,64 @@ The planning process will follow a structured and sequential approach, ensuring 
 | **14/03/25** |- Final functional specifications<br>- Technical specifications advanced <br>- Parsing verilog files <br>- Development & testing begins                  |
 | **21/03/25** |-  Technical specifications refinement <br>- Test plan refinement <br>- UI development progress <br>- First draft of the user manual <br>- Code testing & debugging   |
 | **28/03/25** |- Final technical specifications <br>- Continuous testing <br>- Further UI & backend improvements <br>- User manual refinement |
-| **01/04/25** |- Code finalization <br>- Final testing & debugging <br>- Final version of the User manual |
-|
+| **01/04/25** |- Code finalization <br>- Final testing & debug <br>- Final version of the User manual |
+
+#### 1.5.3. Dependencies
+
+
+#### 1.5.4. Assumptions/Constraints
+
+**Assumptions:**  
+
+
+**Constraints:**  
+
+
+#### 1.5.5. Risks/Mitigation
+
+
+## 2. Personas and Use Cases
+
+### 2.1. Personas
+
+#### 2.1.1. Dr. Dawson
+
+![Dawson](./images/Dawson.jpg)
+
+#### 2.1.2. Mr. Anderson
+
+![Anderson](./images/Anderson.jpg)
+
+#### 2.1.3. Alex
+
+![Alex](./images/Alex.jpg)
+
+#### 2.1.4. Sara
+
+![Sara](./images/Sara.jpg)
+
+### 2.2. Use Cases
+
+
+## 3. Functional Requirements
+
+## 4. Non-functional Requirements
+
+### 4.1.  Performance & Scalability
+
+   - The web interface should provide smooth rendering and responsive navigation (zoom, pan, select).
+   - Simulation playback should support adjustable speeds (x1, x2, x4, etc.) and step-by-step execution.
+   - Backend processing (synthesis, P&R, and simulation) should handle large FPGA designs efficiently.
+   - The system must support multiple concurrent users (students & teachers) without significant slowdown.
+
+### 4.2. Usability & Accessibility
+
+   - The UI should be intuitive and visually clear, ensuring students with limited FPGA experience can navigate easily.
+   - Playback controls (play, pause, step, speed adjustment) should be easy to access and use.
+   - The system should be accessible from any modern web browser (Chrome, Firefox, Edge, etc.).
+
+### 4.3. Compatibility & Maintainability
+
+   - The system must support standard Verilog and SDF formats for FPGA netlists and timing data.
+   - It should be interoperable with Impulse, Yosys, VPR, and ModelSim.
+   - The codebase should be modular and well-documented, allowing future FPGA models and features to be added easily.
