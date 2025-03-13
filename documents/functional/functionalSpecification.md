@@ -5,14 +5,16 @@
 
 - [Functional Specifications](#functional-specifications)
   - [1. Introduction](#1-introduction)
-    - [1.1. Glossary](#11-glossary)
-    - [1.2. Project Overview](#12-project-overview)
-    - [1.3. Project Definition](#13-project-definition)
-      - [1.3.1. Vision](#131-vision)
-      - [1.3.2. Objectives](#132-objectives)
-      - [1.3.3. Scope](#133-scope)
-      - [1.3.4. Target Audience](#134-target-audience)
-      - [1.3.5. Deliverables](#135-deliverables)
+    - [1.1. Project Overview](#11-project-overview)
+      - [Problem Statement](#problem-statement)
+    - [1.2. Project Definition](#12-project-definition)
+      - [Vision](#vision)
+      - [Objectives](#objectives)
+      - [Scope](#scope)
+      - [Target Audience](#target-audience)
+      - [User Experience Goals](#user-experience-goals)
+      - [Deliverables](#deliverables)
+    - [1.3. Glossary](#13-glossary)
     - [1.4. Project Organization](#14-project-organization)
       - [1.4.1. Project Representatives](#141-project-representatives)
       - [1.4.2. Stakeholders](#142-stakeholders)
@@ -20,27 +22,110 @@
     - [1.5. Project Plan](#15-project-plan)
       - [1.5.1. Planning](#151-planning)
       - [1.5.2. Milestones](#152-milestones)
-      - [1.5.3. Dependencies](#153-dependencies)
-      - [1.5.4. Assumptions/Constraints](#154-assumptionsconstraints)
-      - [1.5.5. Risks/Mitigation](#155-risksmitigation)
-  - [2. Personas and Use Cases](#2-personas-and-use-cases)
-    - [2.1. Personas](#21-personas)
-      - [2.1.1. Dr. Dawson](#211-dr-dawson)
-      - [2.1.2. Mr. Anderson](#212-mr-anderson)
-      - [2.1.3. Alex](#213-alex)
-      - [2.1.4. Sara](#214-sara)
-    - [2.2. Use Cases](#22-use-cases)
-  - [3. Functional Requirements](#3-functional-requirements)
-  - [4. Non-functional Requirements](#4-non-functional-requirements)
-    - [4.1.  Performance \& Scalability](#41--performance--scalability)
-    - [4.2. Usability \& Accessibility](#42-usability--accessibility)
-    - [4.3. Compatibility \& Maintainability](#43-compatibility--maintainability)
+  - [2. System Overview](#2-system-overview)
+    - [2.1. Technology Stack](#21-technology-stack)
+    - [2.2. Architecture](#22-architecture)
+    - [2.3. Component Responsibilities](#23-component-responsibilities)
+    - [2.4. Communication Flow](#24-communication-flow)
+  - [3. User Interaction](#3-user-interaction)
+    - [3.1. File Upload Process](#31-file-upload-process)
+    - [3.2. File Processing Feedback](#32-file-processing-feedback)
+    - [3.3. Simulation Controls](#33-simulation-controls)
+    - [3.4. Visualization Interaction](#34-visualization-interaction)
+  - [4. Personas and Use Cases](#4-personas-and-use-cases)
+    - [4.1. Personas](#41-personas)
+      - [4.1.1. Dr. Dawson](#411-dr-dawson)
+      - [4.1.2. Mr. Anderson](#412-mr-anderson)
+      - [4.1.3. Alex](#413-alex)
+      - [4.1.4. Sara](#414-sara)
+    - [4.2. Use Cases](#42-use-cases)
+  - [5. Functional Requirements](#5-functional-requirements)
+    - [5.1. Frontend Requirements](#51-frontend-requirements)
+    - [5.2. Backend Requirements](#52-backend-requirements)
+    - [5.3. Error Handling](#53-error-handling)
+  - [6. UI Components \& Features](#6-ui-components--features)
+    - [6.1. Main Interface Layout](#61-main-interface-layout)
+    - [6.2. Control Panel](#62-control-panel)
+    - [6.3. Visualization Area](#63-visualization-area)
+    - [6.4. File Management](#64-file-management)
+  - [7. Non-functional Requirements](#7-non-functional-requirements)
+    - [7.1.  Performance \& Scalability](#71--performance--scalability)
+    - [7.2. Usability \& Accessibility](#72-usability--accessibility)
+    - [7.3. Compatibility \& Maintainability](#73-compatibility--maintainability)
 
 </details>
 
 ## 1. Introduction
 
-### 1.1. Glossary
+### 1.1. Project Overview
+
+#### Problem Statement
+
+Understanding how signals propagate inside FPGAs presents a significant challenge for students and professionals alike. Traditional educational approaches often lack visual aids that connect theoretical concepts with practical implementation. This web-based FPGA simulator addresses this gap by providing an interactive, visual environment where users can observe and manipulate signal propagation in real-time.
+
+By visualizing the internal workings of an FPGA, this application transforms abstract hardware concepts into tangible, observable processes. This bridges the gap between theory and application, making FPGA education more accessible and engaging.
+
+### 1.2. Project Definition
+
+#### Vision
+
+The primary goal of this project is to provide an educational and interactive tool for FPGA learners. By merging the 2D FPGA floorplan with real-time signal propagation, the web interface will help users understand and analyze FPGA behavior at both structural and timing levels. It will serve as a learning platform for students and a teaching aid for instructors.
+
+#### Objectives
+
+- Develop a web-based application for visualizing FPGA signal propagation.
+- Allow students to interact with the FPGA layout, selecting and analyzing predefined application examples.
+- Provide real-time simulation controls, including play, step execution, speed adjustment, and pause/resume.
+- Enable teachers to upload new application examples (Verilog designs and testbenches).
+- Implement a backend processing system to generate necessary simulation data.
+- Support two roles: teachers (backend data preparation) and students (frontend visualization and interaction).
+- Deliver a functional prototype with at least two application examples (Flip-flop & LUT4).
+
+#### Scope
+
+The project covers:
+
+- **Frontend:** A web interface for students, displaying an interactive 2D view of the FPGA layout and signal propagation.
+- **Backend:** A system allowing teachers to upload Verilog applications and testbenches, generating the required simulation data.
+- **Visualization:** Graphical representation of FPGA elements (Basic Elements - BELs) and signal paths.
+- **Simulation Control:** Features like zoom, pan, play, step execution, speed adjustment, and pause/resume.
+- **Deliverables:** Source code, setup guides, user manuals, and at least two application examples.
+
+#### Target Audience
+
+The application is designed for three primary user groups:
+
+| User Group | Description | Primary Needs |
+|------------|-------------|---------------|
+| **Students** | Individuals learning FPGA concepts and design principles | Visual learning tools, intuitive interface, pre-loaded examples |
+| **Teachers/Instructors** | Educators teaching FPGA concepts in classroom settings | Ability to upload custom examples, demonstration tools, monitoring student progress |
+| **FPGA Professionals** | Engineers and developers working with FPGA technology | Quick visualization tools, debugging capabilities, advanced features |
+
+Each user group brings unique requirements that shape the application's functionality and interface design.
+
+#### User Experience Goals
+
+The application aims to deliver:
+
+- **Intuitive Navigation**: A user interface that requires minimal training to operate effectively
+- **Real-time Feedback**: Immediate visual response to user actions and file processing
+- **Interactive Learning**: Ability to control simulation speed, step through processes, and observe changes
+- **Self-Guided Exploration**: Tools that encourage experimentation and discovery
+- **Accessibility**: Functions that work across different devices and for users with varying technical backgrounds
+
+
+#### Deliverables
+
+| Deliverable               | Purpose                                                                                                                                         |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Functional Specifications | Detailed documentation of the features used and their non-technical aspects.                                                                    |
+| Technical Specifications  | Detailed documentation on the technical implementation of software                                              
+| Source Code           | The complete software implementation, including frontend, backend, and FPGA-related logic, with inline documentation.|
+| Test Plan & Test Cases    | A structured set of test scenarios ensuring the accuracy, functionality, and efficiency of the FPGA simulator, covering frontend interactions, backend processing, and signal propagation validation. |
+| User Manual               | End-user documentation covering installation, configuration, usage, troubleshooting, and maintenance.                                                                                                    |
+| Example Applications               | EAt least two FPGA application examples (Flip-Flop & LUT4) to demonstrate functionality.
+
+### 1.3. Glossary
 
 
 | **Term**                      | **Definition**                                                                                                   |
@@ -62,62 +147,13 @@
 | **Pause/Resume Button**         | A control that stops or continues the simulation playback.                                                       |
 | **Zoom & Move Controls**        | Interactive features that allow users to navigate within the FPGA floorplan visualization.                        |
 | **Impulse**                     | A tool used for FPGA synthesis and place & route, converting Verilog designs into netlists and routing information. |
-| **Modelsim**                    | A simulation tool that executes Verilog testbenches and models timing-based signal propagation.                   |
+| **Modelism**                    | A simulation tool that executes Verilog testbenches and models timing-based signal propagation.                   |
 | **Yosys**                       | An open-source synthesis tool that converts Verilog code into a netlist.                                          |
 | **VPR (Verilog to Routing)**     | A toolchain for place & route in FPGA design, often used in open-source FPGA workflows.                         |
 | **GTKWave**                     | A waveform viewer that displays simulation results from FPGA testbenches.                                        |
 | **Teacher Role**                | The user responsible for uploading Verilog applications and testbenches to the backend for student simulations.  |
 | **Student Role**                | The user who interacts with the web interface to explore FPGA applications and visualize signal propagation.      |
 | **Pivot File Format**           | A possible intermediary data format used to bridge FPGA netlist and timing information between backend and frontend. |
-|
-
-### 1.2. Project Overview
-
-The project aims to develop a web interface for an FPGA simulator, enabling students and teachers to visualize signal propagation within an FPGA. The simulator will integrate timing simulation with a 2D representation of the FPGA layout, allowing users to see how electrical signals travel through the circuit over time. The interface will support interactive controls like zoom, navigation, step execution, and speed control.
-
-### 1.3. Project Definition
-
-#### 1.3.1. Vision
-
-The primary goal of this project is to provide an educational and interactive tool for FPGA learners. By merging the 2D FPGA floorplan with real-time signal propagation, the web interface will help users understand and analyze FPGA behavior at both structural and timing levels. It will serve as a learning platform for students and a teaching aid for instructors.
-
-#### 1.3.2. Objectives
-
-- Develop a web-based application for visualizing FPGA signal propagation.
-- Allow students to interact with the FPGA layout, selecting and analyzing predefined application examples.
-- Provide real-time simulation controls, including play, step execution, speed adjustment, and pause/resume.
-- Enable teachers to upload new application examples (Verilog designs and testbenches).
-- Implement a backend processing system to generate necessary simulation data.
-- Support two roles: teachers (backend data preparation) and students (frontend visualization and interaction).
-- Deliver a functional prototype with at least two application examples (Flip-flop & LUT4).
-
-#### 1.3.3. Scope
-
-The project covers:
-
-- **Frontend:** A web interface for students, displaying an interactive 2D view of the FPGA layout and signal propagation.
-- **Backend:** A system allowing teachers to upload Verilog applications and testbenches, generating the required simulation data.
-- **Visualization:** Graphical representation of FPGA elements (Basic Elements - BELs) and signal paths.
-- **Simulation Control:** Features like zoom, pan, play, step execution, speed adjustment, and pause/resume.
-- **Deliverables:** Source code, setup guides, user manuals, and at least two application examples.
-
-#### 1.3.4. Target Audience
-
-- **Students:** Use the web interface to learn about FPGA internals and observe signal propagation.
-- **Teachers/Instructors:** Prepare and upload new FPGA applications for simulation.
-- **FPGA Enthusiasts & Researchers:** Use the tool for debugging and educational purposes.
-
-#### 1.3.5. Deliverables
-
-| Deliverable               | Purpose                                                                                                                                         |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| Functional Specifications | Detailed documentation of the features used and their non-technical aspects.                                                                    |
-| Technical Specifications  | Detailed documentation on the technical implementation of software                                              
-| Source Code           | The complete software implementation, including frontend, backend, and FPGA-related logic, with inline documentation.|
-| Test Plan & Test Cases    | A structured set of test scenarios ensuring the accuracy, functionality, and efficiency of the FPGA simulator, covering frontend interactions, backend processing, and signal propagation validation. |
-| User Manual               | End-user documentation covering installation, configuration, usage, troubleshooting, and maintenance.                                                                                                    |
-| Example Applications               | EAt least two FPGA application examples (Flip-Flop & LUT4) to demonstrate functionality.
-|
 
 ### 1.4. Project Organization
 
@@ -160,61 +196,312 @@ The planning process will follow a structured and sequential approach, ensuring 
 | **28/03/25** |- Final technical specifications <br>- Continuous testing <br>- Further UI & backend improvements <br>- User manual refinement |
 | **01/04/25** |- Code finalization <br>- Final testing & debug <br>- Final version of the User manual |
 
-#### 1.5.3. Dependencies
+
+## 2. System Overview
+
+### 2.1. Technology Stack
+
+The application leverages modern web technologies to ensure performance, maintainability, and user experience:
+
+**Frontend:**
+- **React**: Component-based UI library for building the interactive user interface
+- **Vite**: Build tool and development server providing fast HMR (Hot Module Replacement)
+- **TailwindCSS**: Utility-first CSS framework for responsive and customizable styling
+- **D3.js**: Data visualization library for rendering complex FPGA components and signal flows
+
+**Backend:**
+- **Node.js**: JavaScript runtime for server-side processing
+- **Express**: Minimal web framework for handling HTTP requests
+- **File processing libraries**: For parsing .sdf and .v files efficiently
+
+**Deployment:**
+- **Docker**: For containerized deployment when needed
+- **GitHub Pages**: For static frontend deployment options
+
+> **Rationale:** This stack was selected to balance development speed, performance, and maintainability. React and Vite enable rapid UI development while D3.js provides the powerful visualization capabilities needed for FPGA representation.
+
+### 2.2. Architecture
+
+<div style="text-align: center; padding: 20px; background-color: #f5f5f5; border-radius: 8px;">
+  <pre style="font-family: monospace; text-align: left; display: inline-block;">
+┌─────────────────┐     HTTP/API      ┌─────────────────┐
+│                 │  Requests/Response │                 │
+│     Frontend    │◄─────────────────►│     Backend     │
+│   (React/Vite)  │                   │    (Node.js)    │
+│                 │                   │                 │
+└────────┬────────┘                   └────────┬────────┘
+         │                                     │
+         │                                     │
+┌────────▼────────┐                   ┌────────▼────────┐
+│                 │                   │                 │
+│  Web Browser    │                   │  File System    │
+│                 │                   │  (.sdf, .v)     │
+│                 │                   │                 │
+└─────────────────┘                   └─────────────────┘
+  </pre>
+</div>
+
+The architecture follows a client-server model with clear separation of concerns:
+
+- **Frontend**: Handles all user interactions, visualization rendering, and simulation playback
+- **Backend**: Processes uploaded files, generates JSON models, and serves data to the frontend
+- **Local Storage**: Stores uploaded files and processed data temporarily in the user's system
+
+### 2.3. Component Responsibilities
+
+**Frontend Components:**
+- **User Interface**: Renders the application layout, controls, and visualization area
+- **File Manager**: Handles file uploads and displays available files
+- **Visualization Engine**: Renders the FPGA components and signal propagation based on JSON models
+- **Simulation Controller**: Manages playback, step execution, and speed controls
+- **Error Handler**: Displays user-friendly error messages and guidance
+
+**Backend Components:**
+- **API Server**: Receives HTTP requests and manages responses
+- **File Processor**: Parses .sdf and .v files to extract FPGA structure and signal information
+- **Model Generator**: Creates JSON models from parsed file data
+- **Error Manager**: Detects and reports issues with file processing or server operations
+
+### 2.4. Communication Flow
+
+1. **File Upload**: Frontend sends files to backend via HTTP POST request
+2. **Processing**: Backend parses files and generates a JSON model
+3. **Model Delivery**: Backend returns the JSON model to frontend
+4. **Visualization**: Frontend renders the model and enables interactive simulation
+5. **User Interaction**: Frontend handles user interactions locally, with state updates as needed
+6. **Error Communication**: Backend sends structured error information when issues occur
 
 
-#### 1.5.4. Assumptions/Constraints
+## 3. User Interaction
 
-**Assumptions:**  
+### 3.1. File Upload Process
+
+Users can upload files through multiple methods:
+
+1. **Direct Upload**: Standard file picker dialog
+   - Single file upload
+   - Multiple file upload option
+   - Drag-and-drop support
+
+2. **Example Selection**: Pre-loaded examples for immediate use
+   - Categorized by complexity and concept
+   - Brief descriptions to guide selection
 
 
-**Constraints:**  
 
+### 3.2. File Processing Feedback
 
-#### 1.5.5. Risks/Mitigation
+During and after file processing, users receive visual feedback:
 
+- **Progress Indicators**: Shows file parsing and model generation progress
+- **Success Notifications**: Confirms when files are successfully processed
+- **Error Messages**: Clear explanations when issues occur, with suggested solutions
+- **Processing Statistics**: Optional information about file size, processing time, and model complexity
 
-## 2. Personas and Use Cases
+The system maintains transparency throughout the processing pipeline, keeping users informed of the current state and any actions required.
 
-### 2.1. Personas
+### 3.3. Simulation Controls
 
-#### 2.1.1. Dr. Dawson
+Users interact with the simulation through an intuitive control panel:
+
+| Control | Function | User Interaction |
+|---------|----------|------------------|
+| Play | Start or resume simulation | Button click |
+| Pause | Temporarily stop simulation | Button click |
+| Step | Advance simulation by one time unit | Button click |
+| Speed | Adjust simulation playback rate | Slider or dropdown |
+| Reset | Return to initial state | Button click |
+| Time Scrubber | Navigate to specific simulation time | Draggable slider |
+| Zoom | Adjust visualization scale | Slider, buttons, or mouse wheel |
+| Pan | Navigate around the visualization | Click and drag |
+
+These controls provide precise management of the simulation experience, allowing for detailed examination of signal propagation.
+
+### 3.4. Visualization Interaction
+
+The visualization area supports rich interaction:
+
+- **Component Selection**: Click on FPGA elements to view detailed information
+- **Signal Tracing**: Highlight specific signals to follow their path through the FPGA
+
+## 4. Personas and Use Cases
+
+### 4.1. Personas
+
+#### 4.1.1. Dr. Dawson
 
 ![Dawson](./images/Dawson.jpg)
 
-#### 2.1.2. Mr. Anderson
+#### 4.1.2. Mr. Anderson
 
 ![Anderson](./images/Anderson.jpg)
 
-#### 2.1.3. Alex
+#### 4.1.3. Alex
 
 ![Alex](./images/Alex.jpg)
 
-#### 2.1.4. Sara
+#### 4.1.4. Sara
 
 ![Sara](./images/Sara.jpg)
 
-### 2.2. Use Cases
+### 4.2. Use Cases
 
 
-## 3. Functional Requirements
+## 5. Functional Requirements
 
-## 4. Non-functional Requirements
+### 5.1. Frontend Requirements
 
-### 4.1.  Performance & Scalability
+1. **File Handling**
+   - Accept .sdf and .v file uploads through drag-and-drop or file picker
+   - Validate file formats before submission to backend
+   - Display file metadata and status
+
+2. **Visualization**
+   - Render FPGA components based on JSON model data
+   - Support zooming from overview to detailed component view
+   - Enable panning across the visualization area
+   - Highlight active components and signals during simulation
+
+3. **Simulation Control**
+   - Implement playback controls (play, pause, step)
+   - Support variable simulation speeds (x1, x2, x4, etc.)
+   - Provide reset functionality to return to initial state
+   - Display current simulation time and progress
+
+4. **User Interface**
+   - Implement responsive design for different screen sizes
+   - Support keyboard shortcuts for common actions
+   - Provide tooltips and help information for all controls
+
+### 5.2. Backend Requirements
+
+1. **File Processing**
+   - Parse .sdf files to extract timing information
+   - Parse .v files to understand FPGA structure and logic
+   - Validate file integrity and compatibility
+   - Process files asynchronously to maintain UI responsiveness
+
+2. **Model Generation**
+   - Create structured JSON models from parsed file data
+   - Include component physical locations for 2D rendering
+   - Include timing information for simulation playback
+
+3. **API Endpoints**
+   - Implement file upload endpoint with multipart/form-data support
+   - Provide model retrieval endpoint for processed data
+   - Include status endpoint for checking processing progress
+   - Implement error reporting endpoint for client-side issues
+
+4. **Performance**
+   - Optimize file parsing for memory efficiency
+   - Implement streaming processing for large files
+   - Support cancellation of long-running operations
+   - Include progress reporting for extended processing tasks
+
+
+### 5.3. Error Handling
+
+1. **Client-Side Errors**
+   - Validate file formats before upload
+   - Handle network connectivity issues gracefully
+
+2. **Server-Side Errors**
+   - Return structured error responses with clear messages
+   - Include error codes for programmatic handling
+
+3. **User Feedback**
+   - Display friendly messages for 404 (resource not found) errors
+   - Show helpful guidance for 500 (server error) situations
+   - Indicate validation errors before submission
+   - Provide contextual help based on error type
+
+## 6. UI Components & Features
+
+### 6.1. Main Interface Layout
+
+The interface follows a logical layout with distinct functional areas:
+
+<div style="text-align: center; padding: 20px; background-color: #f5f5f5; border-radius: 8px;">
+  <pre style="font-family: monospace; text-align: left; display: inline-block;">
+┌─────────────────────────────────────────────────┐
+│                  Header/Navigation              │
+├─────────────┬───────────────────────────────────┤
+│             │                                   │
+│             │                                   │
+│   File      │                                   │
+│   Explorer  │         Visualization Area        │
+│   &         │                                   │
+│   Options   │                                   │
+│             │                                   │
+│             │                                   │
+├─────────────┴───────────────────────────────────┤
+│                                                 │
+│               Simulation Controls               │
+│                                                 │
+└─────────────────────────────────────────────────┘
+  </pre>
+</div>
+
+- **Header/Navigation**: Application name, user controls, help access
+- **File Explorer**: File upload, selection, and management
+- **Visualization Area**: FPGA component rendering and interaction
+- **Simulation Controls**: Playback and time navigation controls
+
+### 6.2. Control Panel
+
+The control panel provides access to all simulation functions:
+
+1. **Playback Controls**
+   - Play/Pause button with appropriate icon changes
+   - Step forward button with keyboard shortcut
+   - Speed control with preset options (0.5x, 1x, 2x, 4x, 10x)
+   - Reset button with confirmation for safety
+
+2. **Navigation Controls**
+   - Time slider showing full simulation timeline
+   - Current time indicator with numerical display
+   - Zoom controls with percentage display
+   - Pan reset button to return to default view
+
+### 6.3. Visualization Area
+
+1. **2D Floorplan View**
+   - Physical layout of FPGA components
+   - Routing paths between components
+   - Color-coded signal states
+   - Zoom levels from overview to component detail
+
+
+### 6.4. File Management
+
+The file management interface allows users to:
+
+1. **Upload Files**
+   - Drag-and-drop area with clear instructions
+   - File browser button for traditional selection
+   - Format specifications and size limits clearly indicated
+
+2. **Manage Existing Files**
+   - List view of uploaded files with key metadata
+   - Delete option with confirmation
+   - Ability to rename files for organization
+
+## 7. Non-functional Requirements
+
+### 7.1.  Performance & Scalability
 
    - The web interface should provide smooth rendering and responsive navigation (zoom, pan, select).
    - Simulation playback should support adjustable speeds (x1, x2, x4, etc.) and step-by-step execution.
    - Backend processing (synthesis, P&R, and simulation) should handle large FPGA designs efficiently.
    - The system must support multiple concurrent users (students & teachers) without significant slowdown.
 
-### 4.2. Usability & Accessibility
+### 7.2. Usability & Accessibility
 
    - The UI should be intuitive and visually clear, ensuring students with limited FPGA experience can navigate easily.
    - Playback controls (play, pause, step, speed adjustment) should be easy to access and use.
    - The system should be accessible from any modern web browser (Chrome, Firefox, Edge, etc.).
 
-### 4.3. Compatibility & Maintainability
+### 7.3. Compatibility & Maintainability
 
    - The system must support standard Verilog and SDF formats for FPGA netlists and timing data.
    - It should be interoperable with Impulse, Yosys, VPR, and ModelSim.
