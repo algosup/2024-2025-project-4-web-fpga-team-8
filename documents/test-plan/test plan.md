@@ -1,6 +1,7 @@
 <details>
 <summary> Table of Contents</summary>
-- [1. Introduction](#1.-introduction)
+
+- [1.Introduction](#1.-introduction)
 - [2. Testing Strategy](#2.-testing-strategy)
 	- [2.1 Testing Scope](#2.1-testing-scope)
 		- [2.1.1 In Scope](#2.1.1-in-scope)
