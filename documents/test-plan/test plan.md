@@ -204,7 +204,9 @@ You can review the template by following this [link.](https://github.com/algosup
 | Bug reports                 | 3 hours  |
 | Bug data report creation    | 3 hours  |
 | Bug data report fulfillment | 5 hours  |
+
 All the defined durations for each task only are expected. Therefore, if a task takes more time than needed, overtime hours could be done to complete these tasks before their deadlines.
+
 ## 10. Test Deliverables
 
 All the test deliverables should be delivered on the 25th of March.
