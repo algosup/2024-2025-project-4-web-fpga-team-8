@@ -34,15 +34,16 @@
       - [3.1.3. Alex](#313-alex)
       - [3.1.4. Sara](#314-sara)
     - [3.2. Use Cases](#32-use-cases)
-  - [4. Functional Requirements](#4-functional-requirements)
-    - [4.1. Frontend Requirements](#41-frontend-requirements)
-    - [4.2. Backend Requirements](#42-backend-requirements)
-    - [4.3. Error Handling](#43-error-handling)
-  - [5. UI Components \& Features](#5-ui-components--features)
-    - [5.1. Main Interface Layout](#51-main-interface-layout)
-    - [5.2. Control Panel](#52-control-panel)
-    - [5.3. Visualization Area](#53-visualization-area)
-    - [5.4. File Management](#54-file-management)
+  - [4. UI Components \& Features](#4-ui-components--features)
+    - [4.1. Main Interface Layout](#41-main-interface-layout)
+    - [4.2. Control Panel](#42-control-panel)
+    - [4.3. Visualization Area](#43-visualization-area)
+    - [4.4. File Management](#44-file-management)
+    - [4.5. MockUps](#45-mockups)
+  - [5. Functional Requirements](#5-functional-requirements)
+    - [5.1. Frontend Requirements](#51-frontend-requirements)
+    - [5.2. Backend Requirements](#52-backend-requirements)
+    - [5.3. Error Handling](#53-error-handling)
   - [6. Non-functional Requirements](#6-non-functional-requirements)
     - [6.1.  Performance \& Scalability](#61--performance--scalability)
     - [6.2. Usability \& Accessibility](#62-usability--accessibility)
@@ -269,77 +270,10 @@ The following use case diagram illustrates the interactions between users and th
 
 ![Diagram](./images/diagram.png)
 
-## 4. Functional Requirements
 
-### 4.1. Frontend Requirements
+## 4. UI Components & Features
 
-1. **File Handling**
-   - Accept .sdf and .v file uploads through drag-and-drop or file picker
-   - Validate file formats before submission to backend
-   - Display file metadata and status
-
-2. **Visualization**
-   - Render FPGA components based on JSON model data
-   - Support zooming from overview to detailed component view
-   - Enable panning across the visualization area
-   - Highlight active components and signals during simulation
-
-3. **Simulation Control**
-   - Implement playback controls (play, pause, step)
-   - Support variable simulation speeds (x1, x2, x4, etc.)
-   - Provide reset functionality to return to initial state
-   - Display current simulation time and progress
-
-4. **User Interface**
-   - Implement responsive design for different screen sizes
-   - Support keyboard shortcuts for common actions
-   - Provide tooltips and help information for all controls
-
-### 4.2. Backend Requirements
-
-1. **File Processing**
-   - Parse .sdf files to extract timing information
-   - Parse .v files to understand FPGA structure and logic
-   - Validate file integrity and compatibility
-   - Process files asynchronously to maintain UI responsiveness
-
-2. **Model Generation**
-   - Create structured JSON models from parsed file data
-   - Include component physical locations for 2D rendering
-   - Include timing information for simulation playback
-
-3. **API Endpoints**
-   - Implement file upload endpoint with multipart/form-data support
-   - Provide model retrieval endpoint for processed data
-   - Include status endpoint for checking processing progress
-   - Implement error reporting endpoint for client-side issues
-
-4. **Performance**
-   - Optimize file parsing for memory efficiency
-   - Implement streaming processing for large files
-   - Support cancellation of long-running operations
-   - Include progress reporting for extended processing tasks
-
-
-### 4.3. Error Handling
-
-1. **Client-Side Errors**
-   - Validate file formats before upload
-   - Handle network connectivity issues gracefully
-
-2. **Server-Side Errors**
-   - Return structured error responses with clear messages
-   - Include error codes for programmatic handling
-
-3. **User Feedback**
-   - Display friendly messages for 404 (resource not found) errors
-   - Show helpful guidance for 500 (server error) situations
-   - Indicate validation errors before submission
-   - Provide contextual help based on error type
-
-## 5. UI Components & Features
-
-### 5.1. Main Interface Layout
+### 4.1. Main Interface Layout
 
 The interface follows a logical layout with distinct functional areas:
 
@@ -369,7 +303,7 @@ The interface follows a logical layout with distinct functional areas:
 - **Visualization Area**: FPGA component rendering and interaction
 - **Simulation Controls**: Playback and time navigation controls
 
-### 5.2. Control Panel
+### 4.2. Control Panel
 
 The control panel provides access to all simulation functions:
 
@@ -385,7 +319,7 @@ The control panel provides access to all simulation functions:
    - Zoom controls with percentage display
    - Pan reset button to return to default view
 
-### 5.3. Visualization Area
+### 4.3. Visualization Area
 
 1. **2D Floorplan View**
    - Physical layout of FPGA components
@@ -393,8 +327,7 @@ The control panel provides access to all simulation functions:
    - Color-coded signal states
    - Zoom levels from overview to component detail
 
-
-### 5.4. File Management
+### 4.4. File Management
 
 The file management interface allows users to:
 
@@ -407,6 +340,96 @@ The file management interface allows users to:
    - List view of uploaded files with key metadata
    - Delete option with confirmation
    - Ability to rename files for organization
+
+### 4.5. MockUps
+
+**Display of the whole page:**
+
+![page](./images/global.jpg)
+
+
+
+**Most important components of the page:**
+
+| Screenshot | Component Name      | Description |
+|------------|--------------------|-------------|
+| ![Play Button](./images/play.jpg) | **Play** | Starts the simulation. |
+| ![Reset Button](./images/reset.jpg) | **Reset** | Resets the simulation to its initial state. |
+| ![Speed Control](./images/speed.jpg) | **Speed** | Adjusts the speed of the simulation. |
+| ![Import Button](./images/import.jpg) | **Import** | Loads an external Verilog file. |
+| ![Export Button](./images/export.jpg) | **Export** | Saves the current Verilog code or simulation. |
+| ![Simulation Area](./images/simulation.jpg) | **Simulation Part** | Displays the simulation. |
+| ![Error Message](./images/error.png) | **Error Message** | Displays error messages when there is an issue. |
+| ![Confirmation Message](./images/confirm.png) | **Confirmation Message** | Provides confirmation prompts for user actions. |
+
+
+## 5. Functional Requirements
+
+### 5.1. Frontend Requirements
+
+1. **File Handling**
+   - Accept .sdf and .v file uploads through drag-and-drop or file picker
+   - Validate file formats before submission to backend
+   - Display file metadata and status
+
+2. **Visualization**
+   - Render FPGA components based on JSON model data
+   - Support zooming from overview to detailed component view
+   - Enable panning across the visualization area
+   - Highlight active components and signals during simulation
+
+3. **Simulation Control**
+   - Implement playback controls (play, pause, step)
+   - Support variable simulation speeds (x1, x2, x4, etc.)
+   - Provide reset functionality to return to initial state
+   - Display current simulation time and progress
+
+4. **User Interface**
+   - Implement responsive design for different screen sizes
+   - Support keyboard shortcuts for common actions
+   - Provide tooltips and help information for all controls
+
+### 5.2. Backend Requirements
+
+1. **File Processing**
+   - Parse .sdf files to extract timing information
+   - Parse .v files to understand FPGA structure and logic
+   - Validate file integrity and compatibility
+   - Process files asynchronously to maintain UI responsiveness
+
+2. **Model Generation**
+   - Create structured JSON models from parsed file data
+   - Include component physical locations for 2D rendering
+   - Include timing information for simulation playback
+
+3. **API Endpoints**
+   - Implement file upload endpoint with multipart/form-data support
+   - Provide model retrieval endpoint for processed data
+   - Include status endpoint for checking processing progress
+   - Implement error reporting endpoint for client-side issues
+
+4. **Performance**
+   - Optimize file parsing for memory efficiency
+   - Implement streaming processing for large files
+   - Support cancellation of long-running operations
+   - Include progress reporting for extended processing tasks
+
+
+### 5.3. Error Handling
+
+1. **Client-Side Errors**
+   - Validate file formats before upload
+   - Handle network connectivity issues gracefully
+
+2. **Server-Side Errors**
+   - Return structured error responses with clear messages
+   - Include error codes for programmatic handling
+
+3. **User Feedback**
+   - Display friendly messages for 404 (resource not found) errors
+   - Show helpful guidance for 500 (server error) situations
+   - Indicate validation errors before submission
+   - Provide contextual help based on error type
 
 ## 6. Non-functional Requirements
 
