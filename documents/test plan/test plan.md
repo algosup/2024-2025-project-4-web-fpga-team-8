@@ -128,9 +128,9 @@ Pen and touch	No pen or touch input is available for this display
 ### 5.2 Software
 
 - Visual Studio Code
-- Vite/VItest
+- Vite/Vitest
 - Git
-- Anything else that comes up i guess
+- Github
 
 ## 6. Test Criteria 
 
