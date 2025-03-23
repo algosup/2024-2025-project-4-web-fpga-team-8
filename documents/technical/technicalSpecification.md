@@ -30,6 +30,27 @@
   - [5.2. Backend](#52-backend)
     - [5.2.1. Backend - `app.py`](#521-backend---apppy)
     - [5.2.2. File Parsing & Conversion](#522-file-parsing--conversion)
+- [6. Pivot Format Specification](#6-pivot-format-specification)
+  - [6.1. Base Structure](#61-base-structure)
+  - [6.2. Field Descriptions](#62-field-descriptions)
+  - [6.3. Flip-Flop Example](#63-flip-flop-example)
+  - [6.4. LUT Example](#64-lut-example)
+- [7. Simulation Timeline & Playback Model](#7-simulation-timeline--playback-model)
+  - [7.1. Timeline Representation](#71-timeline-representation)
+  - [7.2. Playback Engine](#72-playback-engine)
+  - [7.3. Visual Updates per Tick](#73-visual-updates-per-tick)
+  - [7.4. Example Timeline Flow](#74-example-timeline-flow)
+- [8. Error Handling & Edge Cases](#8-error-handling--edge-cases)
+  - [8.1. Backend Error Cases](#81-backend-error-cases)
+  - [8.2. Frontend Edge Cases](#82-frontend-edge-cases)
+  - [8.3. Future Considerations](#83-future-considerations)
+  - [8.4. Logging & Developer Visibility](#84-logging--developer-visibility)
+- [9. Deployment & Environment Notes](#9-deployment--environment-notes)
+  - [9.1. Environment Requirements](#91-environment-requirements)
+  - [9.2. Running Locally](#92-running-locally)
+- [10. Known Limitations](#10-known-limitations)
+- [11. Future Work & Roadmap](#11-future-work--roadmap)
+- [12. Conclusion](#12-conclusion)
 
 </details>
 
@@ -328,3 +349,242 @@ parsed_json/
 | Uses `DFF`, `NX_DFF`, or `always @(posedge ...)`       | Flip-Flop         |
 | Uses `LUT_K`, `assign`, or logic expressions (`&`, `^`) | LUT               |
 
+## 6. Pivot Format Specification
+
+The **pivot format** is a simplified JSON representation of parsed Verilog and (optionally) SDF files. It serves as the main data interface between the backend and frontend and allows the visualization system to remain agnostic of HDL syntax.
+
+The pivot format includes structural metadata (BELs, nets) and optionally, temporal data (signal transitions) to support dynamic playback.
+
+### 6.1. Base Structure
+
+Each parsed Verilog module is represented as a JSON object with the following base fields:
+
+```json
+{
+  "module": "example_module",
+  "inputs": ["clk", "D"],
+  "outputs": ["Q"],
+  "bel_type": "Flip-Flop"
+}
+```
+
+### 6.2. Field Descriptions
+
+#### Required Fields:
+
+| Field      | Type     | Description                                                              |
+|------------|----------|--------------------------------------------------------------------------|
+| `module`   | `string` | Name of the Verilog module                                               |
+| `inputs`   | `array`  | List of input ports                                                      |
+| `outputs`  | `array`  | List of output ports                                                     |
+| `bel_type` | `string` | High-level classification of the design (`"Flip-Flop"`, `"LUT"`, etc.)   |
+
+#### Optional Fields:
+
+| Field             | Type     | Description                                                              |
+|------------------|----------|--------------------------------------------------------------------------|
+| `nets`           | `array`  | List of internal signal names or net connections                         |
+| `signal_history` | `object` | Maps signal names to time-indexed values (used for playback)             |
+| `timing_info`    | `object` | Raw delay data parsed from SDF                                           |
+
+### 6.3. Flip-Flop Example
+
+This is a minimal example representing a **D Flip-Flop**. It includes one clock input (`clk`), one data input (`D`), and one output (`Q`). The parser detects the presence of a sequential element (via `always @(posedge ...)`) and classifies the BEL type accordingly.
+
+```json
+{
+  "module": "1ff",
+  "inputs": ["clk", "D"],
+  "outputs": ["Q"],
+  "bel_type": "Flip-Flop"
+}
+```
+
+### 6.4. LUT Example
+
+This example represents a 4-input Look-Up Table (LUT4). The module takes four input signals and produces a single output. The parser infers the logic-based nature of the component using `assign` statements or bitwise logic operations and sets the BEL type to `LUT`.
+
+```json
+{
+  "module": "lut4",
+  "inputs": ["A", "B", "C", "D"],
+  "outputs": ["Y"],
+  "bel_type": "LUT"
+}
+```
+
+## 7. Simulation Timeline & Playback Model
+
+The simulation timeline represents how signals evolve over time across the FPGA layout. This model is used by the frontend to animate the activity of each BEL (e.g., Flip-Flops or LUTs) in response to user controls like **play**, **pause**, **step**, and **speed**.
+
+### 7.1. Timeline Representation
+
+Simulation is modeled as a sequence of **discrete time steps**, each corresponding to a logical clock cycle or user-defined granularity. At each time step, the system tracks:
+
+- The state of each **signal**
+- The output of each **BEL**
+- Timing information (optional, from SDF)
+
+This data is embedded in the `signal_history` field of the pivot JSON.
+
+For example, a simple 2-cycle simulation might look like:
+```json
+"signal_history": {
+  "clk":  [0, 1, 0, 1],
+  "D":    [1, 1, 0, 0],
+  "Q1":   [0, 1, 1, 0],
+  "Q2":   [0, 0, 1, 1]
+}
+```
+
+Each array index corresponds to a time tick. For instance, `Q1[2] = 1` means `Q1` is high at time step 2.
+
+### 7.2. Playback Engine
+The frontend uses a simulation controller that allows users to navigate the timeline:
+
+| Action     | Behavior                                          |
+|------------|---------------------------------------------------|
+| **Play**   | Advances time steps continuously                  |
+| **Pause**  | Freezes playback at current step                  |
+| **Step**   | Advances by one tick                              |
+| **Speed**  | Adjusts playback rate (e.g., 1x, 2x, 4x)           |
+| **Reset**  | Returns to time step 0                            |
+
+### 7.3. Visual Updates per Tick
+At each time tick:
+
+- BELs are colored based on output state (on/off)
+- Nets (wires) may be highlighted if actively toggling
+- UI components (timeline slider, labels) are updated accordingly
+
+### 7.4. Example Timeline Flow
+
+```plaintext
+Time 0:
+  clk=0, D=1, Q=0
+  → BEL remains off
+
+Time 1:
+  clk=1 (posedge), D=1
+  → Flip-Flop triggers, Q=1
+
+Time 2:
+  clk=0, D=0
+  → No change, Q=1
+
+Time 3:
+  clk=1 (posedge), D=0
+  → Flip-Flop triggers, Q=0
+```
+
+## 8. Error Handling & Edge Cases
+
+This section outlines how the system should behave when unexpected conditions or invalid inputs occur. These safeguards are important for robustness, especially when the system is extended or deployed in a shared environment.
+
+### 8.1. Backend Error Cases
+
+| Scenario                                | Expected Behavior                                             |
+|----------------------------------------|---------------------------------------------------------------|
+| File not found (`GET /example/<name>`) | Return 404 + error message in JSON                            |
+| Upload folder is empty                 | Return an empty list to `/examples`                           |
+| Malformed Verilog file                 | Skip parsing, log error, do not generate pivot file           |
+| Invalid file extension                 | Ignore file (`.txt`, `.md`, etc. should be filtered out)      |
+| Duplicate file names                   | Overwrite or version (manual cleanup recommended for now)     |
+
+---
+
+### 8.2. Frontend Edge Cases
+
+| Scenario                                   | Expected Behavior                                                  |
+|-------------------------------------------|----------------------------------------------------------------------|
+| User selects file, but JSON is malformed  | Show error message (e.g., "Invalid simulation data")                |
+| Pivot JSON has missing fields             | Use defaults or hide incomplete elements (e.g., no timeline = no playback) |
+| Playback exceeds available signal data    | Clamp to last known value or pause automatically                    |
+| User clicks play with no file selected    | Disable controls until a valid selection is made                    |
+| Backend unavailable (network error)       | Show fallback UI (e.g., "Could not connect to backend")             |
+
+---
+
+### 8.3. Future Considerations
+
+| Topic                  | Proposed Handling                                                |
+|------------------------|------------------------------------------------------------------|
+| File upload failures   | Implement size/type checks, return 400 errors on violation       |
+| SDF mismatch           | Compare netlists before attaching delay info                     |
+| Syntax but no logic    | Warn if a file has valid syntax but no recognizable BEL structure |
+| Unsupported BEL types  | Flag and skip, or show as "Generic BEL" in the frontend           |
+
+---
+
+### 8.4. Logging & Developer Visibility
+
+- **Backend** logs should print skipped or failed files during parsing
+- **Frontend** can use `console.warn()` for partial or missing fields
+- Add alert banners or toast notifications for user-facing errors
+
+> 🧪 These guardrails are lightweight now but provide a solid foundation for integrating testing, validation, and UX improvements later.
+
+## 9. Deployment & Environment Notes
+
+The system is currently configured for local development. Production deployment is planned but not yet implemented.
+
+### 9.1. Environment Requirements
+
+- **Frontend**: Node.js 18+, Vite, React, D3, Material UI
+- **Backend**: Python 3.10+, Flask, Flask-CORS
+- **Parsing Tools**: PyVerilog (future), `python-sdf-timing` (planned)
+
+### 9.2. Running Locally
+
+```bash
+# Frontend
+cd fpgasim/frontend
+npm install
+npm run dev
+
+# Backend
+cd fpgasim/backend
+python app.py
+```
+## 10. Known Limitations
+
+While the current implementation provides a functioning pipeline from Verilog to interactive simulation, several limitations remain:
+
+- **No live HDL editing**: Users cannot write or modify Verilog from the interface.
+- **Regex-based parsing**: Verilog parsing is done with regular expressions, which may not cover complex edge cases or nested modules.
+- **No hierarchical module support**: Only flat modules are supported; submodules are not parsed or visualized.
+- **No interactive wire routing**: The system visualizes signal propagation per BEL but does not display net routing or physical wire paths.
+- **Playback is logical, not time-accurate**: Signal history is shown as logical steps, not real-time propagation (unless SDF is added).
+
+> These limitations reflect intentional scope control for the MVP and can be addressed in future iterations.
+
+## 11. Future Work & Roadmap
+
+Several enhancements have been identified to expand the capabilities of the Web FPGA platform:
+
+- **SDF Integration**: Use actual propagation delays from SDF files to animate accurate timing behavior.
+- **Hierarchy Parsing**: Support multi-module designs and nested components.
+- **Advanced Signal Overlays**: Add net-level routing paths and multi-color signal animations.
+- **Verilog Editor in Browser**: Allow users to write and test Verilog directly in the frontend.
+- **Expanded BEL Library**: Support additional FPGA elements like BRAMs, MUXes, DSP blocks, and I/O pads.
+- **Deployment Pipeline**: Add Docker setup for easy backend/frontend hosting, including Nginx reverse proxy.
+- **Classroom Integration**: Add teacher dashboards, group activities, and exportable reports.
+
+> This roadmap aims to evolve the project into a complete educational FPGA simulator.
+
+## 12. Conclusion
+
+This is just the beginning.
+
+If you're reading this and you're curious, inspired, or just want to learn — we’d love your help.
+
+### 🙌 How to Get Involved
+
+- Check out the issues and roadmap in the repository
+- Try running the simulator locally and suggest improvements
+- Submit pull requests for features, bugfixes, or documentation
+- Open discussions to share use cases, ideas, or educational needs
+
+> Web FPGA is built to teach and built to grow — together.
+
+Thanks for reading, and welcome to the project. 💡
