@@ -1,6 +1,6 @@
 # Test Cases
 
-## Overview 
+## Overview          
 
 This document will gather all the test cases written by the quality assurance. They would be sorted into four different categories which are:
 
