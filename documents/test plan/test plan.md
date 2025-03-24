@@ -161,6 +161,8 @@ The Document template was created with the following parts:
 | 📋**Description**        | **Here is where we explain the task in detail, including context that is necessary.** |
 | ✅**Acceptance criteria** | **Here we list the criteria that will define when the task is considered complete.**  |
 | 📝**Additional Notes**   | **Here we can include any extra information or resources related to the task.**       |
+
+
 You can review the template by following this [link.](https://github.com/algosup/2024-2025-project-4-web-fpga-team-8/blob/main/.github/ISSUE_TEMPLATE/task.yaml)
 
 ### Dev Review
