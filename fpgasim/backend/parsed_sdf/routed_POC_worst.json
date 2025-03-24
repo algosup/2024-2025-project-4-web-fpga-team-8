@@ -1,0 +1,157 @@
+{
+    "design": "RisingEdge_DFlipFlop_AsyncResetHigh",
+    "timescale": "1.0 ns",
+    "cells": [
+        {
+            "cell_type": "RisingEdge_DFlipFlop_AsyncResetHigh",
+            "instance": "UNKNOWN_INSTANCE",
+            "delays": {},
+            "constraints": {}
+        },
+        {
+            "cell_type": "NX_DFF",
+            "instance": "i_Q1_NX_DFF_O_fe_D",
+            "delays": {
+                "IOPATH CK O": {
+                    "min": 0.247,
+                    "typ": 0.247,
+                    "max": 0.281
+                },
+                "IOPATH R O": {
+                    "min": 0.313,
+                    "typ": 0.313,
+                    "max": 0.337
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "NX_DFF",
+            "instance": "i_Q2_NX_DFF_O_fe_D",
+            "delays": {
+                "IOPATH CK O": {
+                    "min": 0.247,
+                    "typ": 0.247,
+                    "max": 0.281
+                },
+                "IOPATH R O": {
+                    "min": 0.313,
+                    "typ": 0.313,
+                    "max": 0.337
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "NX_DFF",
+            "instance": "i_Q3_NX_DFF_O_fe_D",
+            "delays": {
+                "IOPATH CK O": {
+                    "min": 0.247,
+                    "typ": 0.247,
+                    "max": 0.281
+                },
+                "IOPATH R O": {
+                    "min": 0.313,
+                    "typ": 0.313,
+                    "max": 0.337
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "NX_DFF",
+            "instance": "i_Q4_NX_DFF_I_fe_D",
+            "delays": {
+                "IOPATH CK O": {
+                    "min": 0.247,
+                    "typ": 0.247,
+                    "max": 0.281
+                },
+                "IOPATH R O": {
+                    "min": 0.313,
+                    "typ": 0.313,
+                    "max": 0.337
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "NX_DFF",
+            "instance": "i_Q4_NX_DFF_O_fe_D",
+            "delays": {
+                "IOPATH CK O": {
+                    "min": 0.247,
+                    "typ": 0.247,
+                    "max": 0.281
+                },
+                "IOPATH R O": {
+                    "min": 0.313,
+                    "typ": 0.313,
+                    "max": 0.337
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "NX_IOB_I",
+            "instance": "i_D_iob",
+            "delays": {
+                "IOPATH IO O": {
+                    "min": 0.0,
+                    "typ": 0.0,
+                    "max": 0.0
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "NX_IOB_I",
+            "instance": "i_async_reset_iob",
+            "delays": {
+                "IOPATH IO O": {
+                    "min": 0.0,
+                    "typ": 0.0,
+                    "max": 0.0
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "NX_IOB_I",
+            "instance": "i_clk_iob",
+            "delays": {
+                "IOPATH IO O": {
+                    "min": 0.0,
+                    "typ": 0.0,
+                    "max": 0.0
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "NX_IOB_O",
+            "instance": "i_Q_iob",
+            "delays": {
+                "IOPATH I IO": {
+                    "min": 0.0,
+                    "typ": 0.0,
+                    "max": 0.0
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "NX_IOM_U",
+            "instance": "i_IOB10_iom",
+            "delays": {
+                "IOPATH P19RI CKO2": {
+                    "min": 0.155,
+                    "typ": 0.155,
+                    "max": 0.174
+                }
+            },
+            "constraints": {}
+        }
+    ]
+}

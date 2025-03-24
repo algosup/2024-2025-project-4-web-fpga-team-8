@@ -1,0 +1,102 @@
+{
+    "design": "FF2_norst",
+    "timescale": "1 ps",
+    "cells": [
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_D_output_0_0_to_latch_$dff~1^Q~0_input_0_0",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 407.526,
+                    "typ": 407.526,
+                    "max": 407.526
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_clk_output_0_0_to_latch_$dff~1^Q~0_clock_0_0",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 10.0,
+                    "typ": 10.0,
+                    "max": 10.0
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_clk_output_0_0_to_latch_Q_clock_0_0",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 10.0,
+                    "typ": 10.0,
+                    "max": 10.0
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_latch_Q_output_0_0_to_Q_input_0_0",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 1090.38,
+                    "typ": 1090.38,
+                    "max": 1090.38
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_latch_$dff~1^Q~0_output_0_0_to_latch_Q_input_0_0",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 248.0,
+                    "typ": 248.0,
+                    "max": 248.0
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "DFF",
+            "instance": "latch_$dff~1^Q~0",
+            "delays": {
+                "IOPATH (posedge clock) Q": {
+                    "min": 303.0,
+                    "typ": 303.0,
+                    "max": 303.0
+                }
+            },
+            "constraints": {
+                "SETUP D (posedge clock)": {
+                    "min": -46.0,
+                    "typ": -46.0,
+                    "max": -46.0
+                }
+            }
+        },
+        {
+            "cell_type": "DFF",
+            "instance": "latch_Q",
+            "delays": {
+                "IOPATH (posedge clock) Q": {
+                    "min": 303.0,
+                    "typ": 303.0,
+                    "max": 303.0
+                }
+            },
+            "constraints": {
+                "SETUP D (posedge clock)": {
+                    "min": -46.0,
+                    "typ": -46.0,
+                    "max": -46.0
+                }
+            }
+        }
+    ]
+}

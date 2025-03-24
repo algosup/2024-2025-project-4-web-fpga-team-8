@@ -2,10 +2,10 @@
     "module": "flipflop_tb",
     "inputs": [
         "async_reset",
-        "sim_clk",
-        "clk",
         "reset",
-        "D"
+        "D",
+        "clk",
+        "sim_clk"
     ],
     "outputs": [
         "Q"

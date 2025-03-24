@@ -120,8 +120,8 @@ def parse_verilog(file_path):
 
 
 if __name__ == "__main__":
-    input_dir = "uploads"
-    output_dir = "parsed_json"
+    input_dir = "uploads_v"
+    output_dir = "parsed_v"
 
     os.makedirs(output_dir, exist_ok=True)
 

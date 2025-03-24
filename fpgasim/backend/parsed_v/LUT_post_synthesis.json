@@ -1,10 +1,10 @@
 {
-    "module": "FULLLUT",
+    "module": "LUT",
     "inputs": [
         "I4",
+        "I3",
         "I2",
-        "I1",
-        "I3"
+        "I1"
     ],
     "outputs": [
         "O1"
