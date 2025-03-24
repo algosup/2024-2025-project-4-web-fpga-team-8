@@ -35,8 +35,8 @@
 
 The team was tasked to develop a web-based interface for an FPGA simulator. The interface will allow the users to see an animated FPGA board, where the data and electricity signals are represented. Our job is to make sure that the display is accurate, appealing, and easy to use.
 
-| **Note:** Look through the Functional Specifications and Technical specifications for a deeper understanding of the projects structure and implementation. |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+📝**Note:** Look through the [Functional Specifications](https://github.com/algosup/2024-2025-project-4-web-fpga-team-8/blob/main/documents/functional/functionalSpecification.md) and [Technical specifications](https://github.com/algosup/2024-2025-project-4-web-fpga-team-8/blob/main/documents/technical/technicalSpecification.md) for a deeper understanding of the projects structure and implementation.
+
 
 ## 2. Testing Strategy 
 
@@ -121,9 +121,6 @@ Device ID	D2A39D0B-08F9-4CC0-8C61-F6EB30E374E6
 Product ID	00355-61080-22427-AAOEM
 System type	64-bit operating system, x64-based processor
 Pen and touch	No pen or touch input is available for this display
-
-(TEAM LAPTOPS)
-
 
 ### 5.2 Software
 
