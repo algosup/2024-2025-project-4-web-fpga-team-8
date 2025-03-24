@@ -118,18 +118,29 @@ The project will be organized into the following folder structure:
 ~ 2024-2025-project-4-web-fpga-team-8
 │── README.md
 │── documents/
-│   │── functional/
-│   │   ├── functionalSpecification.md
-│   │── management/
-│   │   ├── weekly_reports/
-│   │   │   ├── weeklyReport<nb>.md  # Replace <nb> with report number
-│   │   ├── raciMatrix.pdf
-│   │── technical/
-│   │   ├── technicalSpecification.md
-│── fpgasim/
-│   │── frontend/
-│   │── backend/
-│   │── uploads/
+│   ├── functional/
+│   ├── management/
+│   └── technical/
+│
+└── fpgasim/
+    ├── backend/
+    │   ├── app.py
+    │   ├── verilog_parser.py
+    │   ├── sdf_parser.py
+    │   ├── combine_json.py
+    │   ├── requirements.txt
+    │   ├── uploads_v/
+    │   ├── uploads_sdf/
+    │   ├── parsed_v/
+    │   ├── parsed_sdf/
+    │   └── combined_data/
+    │
+    └── frontend/
+        ├── index.html
+        ├── vite.config.ts
+        ├── package.json
+        ├── public/
+        └── src/
 ```
 
 ## 4. Technologies
