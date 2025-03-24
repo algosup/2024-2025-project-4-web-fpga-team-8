@@ -44,7 +44,7 @@ def merge_designs():
     with open(OUTPUT_FILE, "w") as out:
         json.dump(combined, out, indent=4)
 
-    print(f"\n✅ Combined {len(combined)} modules into {OUTPUT_FILE}")
+    print(f"\nCombined {len(combined)} modules into {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     merge_designs()
