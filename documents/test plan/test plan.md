@@ -170,8 +170,9 @@ You can review the template by following this [link.](https://github.com/algosup
 A development template has also been created in order to keep track of the code and to ensure a readable and well-functioning algorithm.  
 This template is designed in the same way as the document review template. In other words, there are three main parts, which are:
 
-| 📚Background Information | Here we provide context and necessary details about the project or issue, including any relevant history or previous decisions that led to the current task. |
+| -                        | -                                                                                                                                                            |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 📚Background Information | Here we provide context and necessary details about the project or issue, including any relevant history or previous decisions that led to the current task. |
 | 💡Improvements           | Here we outline the specific changes or enhancements to be made, focusing on how the task will add value or solve current challenges.                        |
 | 📝Other Suggestions      | Here we include any additional ideas, alternative approaches, or related recommendations that could further optimize the outcome.                            |
 
