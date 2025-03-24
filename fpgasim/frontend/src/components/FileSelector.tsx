@@ -1,32 +1,31 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Select, MenuItem, Container, Typography } from "@mui/material";
+import { SelectChangeEvent } from "@mui/material";
 
-const API_URL = "http://127.0.0.1:5000";
+interface Props {
+  moduleNames: string[];
+  onSelect: (moduleName: string) => void;
+}
 
-function FileSelector() {
-  const [examples, setExamples] = useState<string[]>([]);
-  const [selectedFile, setSelectedFile] = useState<string>("");
+function FileSelector({ moduleNames, onSelect }: Props) {
+  const [selected, setSelected] = useState("");
 
-  useEffect(() => {
-    fetch(`${API_URL}/examples`)
-      .then((response) => response.json())
-      .then((data: string[]) => setExamples(data));
-  }, []);
+  const handleChange = (e: SelectChangeEvent<string>) => {
+    const value = e.target.value;
+    setSelected(value);
+    onSelect(value);
+  };
 
   return (
     <Container>
-      <Typography variant="h6">Select an FPGA Example:</Typography>
-      <Select
-        value={selectedFile}
-        onChange={(e) => setSelectedFile(e.target.value)}
-        displayEmpty
-      >
+      <Typography variant="h6">Select an FPGA Module:</Typography>
+      <Select value={selected} onChange={handleChange} displayEmpty fullWidth>
         <MenuItem value="" disabled>
-          Select a file
+          Select a module
         </MenuItem>
-        {examples.map((file) => (
-          <MenuItem key={file} value={file}>
-            {file.replace(/_post_synthesis|\.v/g, "")}
+        {moduleNames.map((name) => (
+          <MenuItem key={name} value={name}>
+            {name}
           </MenuItem>
         ))}
       </Select>
