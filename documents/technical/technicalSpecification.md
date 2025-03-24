@@ -40,17 +40,18 @@
   - [5.2.1. Backend - `app.py`](#521-backend---apppy)
     - [Key Features](#key-features)
     - [Folder Configuration](#folder-configuration)
+    - [Available Endpoints](#available-endpoints)
     - [Runtime](#runtime)
     - [CORS](#cors)
+    - [Requirements](#requirements)
   - [5.2.2. File Parsing \& Conversion](#522-file-parsing--conversion)
     - [Purpose](#purpose-2)
     - [How It Works](#how-it-works)
     - [Parsing Features](#parsing-features)
-    - [Output Format (Example)](#output-format-example)
-    - [File Workflow](#file-workflow)
-    - [BEL Type Detection Logic](#bel-type-detection-logic)
+    - [BEL Type Detection Logic (Verilog)](#bel-type-detection-logic-verilog)
 - [6. Pivot Format Specification](#6-pivot-format-specification)
   - [6.1. Base Structure](#61-base-structure)
+  - [6.1. Base Structure](#61-base-structure-1)
   - [6.2. Field Descriptions](#62-field-descriptions)
     - [Required Fields:](#required-fields)
     - [Optional Fields:](#optional-fields)
@@ -71,8 +72,6 @@
   - [9.2. Running Locally](#92-running-locally)
 - [10. Known Limitations](#10-known-limitations)
 - [11. Future Work \& Roadmap](#11-future-work--roadmap)
-- [12. Conclusion](#12-conclusion)
-  - [How to Get Involved](#how-to-get-involved)
 
 </details>
 
@@ -161,7 +160,7 @@ The project will be organized into the following folder structure:
 
 ### 4.2. Backend
 
-- **Framework**: Python (Flask or FastAPI)
+- **Framework**: Python (Flask)
 
   - Selected for its lightweight nature and strong support for handling Verilog and SDF file parsing.
 
@@ -179,13 +178,18 @@ The project will be organized into the following folder structure:
 
 ### 4.5. Parsing Tools
 
-- **Verilog Parsing**: PyVerilog
+- **Verilog Parser (`verilog_parser.py`)**  
+  A custom Python script that uses regular expressions to extract module metadata from `.v` files. It detects:
 
-  - A specialized library for extracting netlist data from Verilog files.
+  - Module name, inputs, and outputs
+  - Assigned signals and logic nets
+  - Basic Element (BEL) type (e.g., Flip-Flop, LUT) based on structural patterns
 
-- **Timing Extraction**: python-sdf-timing
-
-  - Used for parsing SDF files to retrieve signal propagation delays.
+- **SDF Parser (`sdf_parser.py`)**  
+  A custom Python script that extracts delays and timing constraints from `.sdf` files. It handles:
+  - Standard and DFF-specific `IOPATH` delays
+  - Timing checks (`SETUP`, `HOLD`, etc.)
+  - Per-cell delay/constraint aggregation into structured JSON
 
 ## 5. System Architecture
 
@@ -279,28 +283,37 @@ For readability, filenames like:
 
 ### 5.2.1. Backend - `app.py`
 
-The backend is implemented using **Flask**, a lightweight Python web framework. It serves two main purposes:
+The backend is implemented using **Flask**, a lightweight Python web framework. It exposes several REST endpoints that serve Verilog and SDF-related files to the frontend. It also provides access to merged simulation data in JSON format.
 
-1. **File Management**: Hosts and serves pre-generated Verilog/SDF files to the frontend.
-2. **Data Endpoint**: Provides access to the list of available FPGA simulation examples.
-
-The backend is designed to be simple, stateless, and file-based, avoiding any database dependency. It runs on `localhost:5000` by default and supports **Cross-Origin Resource Sharing (CORS)** to allow requests from the frontend.
+The design is **file-based and stateless**, relying on the local file system rather than a database, which simplifies development and debugging.
 
 #### Key Features
 
-- Lists available Verilog/SDF example files
-- Serves raw simulation files by filename
-- Flat file structure (no subfolders)
-- Configurable upload directory (`/uploads`)
+- Lists available simulation files in the `uploads/` directory
+- Serves individual Verilog or SDF files by filename
+- Serves combined `.json` files with parsed Verilog + SDF data from `combined_data/`
+- Supports CORS for frontend-backend communication during local development
 
 #### Folder Configuration
 
 ```python
 UPLOAD_FOLDER = "uploads"
+COMBINED_FOLDER = "combined_data"
+
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+app.config["COMBINED_FOLDER"] = COMBINED_FOLDER
 ```
 
-All simulation files must be placed inside the uploads/ folder.
+- `uploads/`: Directory where Verilog/SDF files are placed
+- `combined_data/`: Stores preprocessed or merged JSON files used by the frontend
+
+#### Available Endpoints
+
+| Method | Endpoint               | Description                                      |
+| ------ | ---------------------- | ------------------------------------------------ |
+| GET    | `/examples`            | Lists all uploaded files in `uploads/`           |
+| GET    | `/example/<filename>`  | Returns a specific file from `uploads/`          |
+| GET    | `/combined/<filename>` | Returns a parsed JSON file from `combined_data/` |
 
 #### Runtime
 
@@ -310,84 +323,90 @@ All simulation files must be placed inside the uploads/ folder.
 
 #### CORS
 
-CORS is enabled to allow requests from the frontend development server (e.g. React’s localhost:5173).
+CORS is enabled to support local development with the React frontend (e.g., running on `localhost:5173`):
 
 ```python
 from flask_cors import CORS
 CORS(app)
 ```
 
+#### Requirements
+
+The backend environment is defined by the following packages listed in `requirements.txt`:
+
+```
+blinker==1.9.0
+click==8.1.8
+Flask==3.1.0
+flask-cors==5.0.1
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.2
+Werkzeug==3.1.3
+```
+
 ### 5.2.2. File Parsing & Conversion
 
-The backend includes a Verilog parser that extracts metadata from each `.v` file and generates a corresponding JSON representation. This JSON serves as a simplified **pivot format** to help the frontend understand which BELs are used and how signals are connected.
+The backend pipeline parses Verilog (`.v`) and SDF (`.sdf`) files and merges their extracted data into a single unified JSON structure.
 
 #### Purpose
 
-This parser analyzes Verilog modules to extract:
-
-- Module name
-- Input and output signals
-- Logic signal assignments
-- BEL type (e.g., Flip-Flop or LUT)
-
-The goal is to convert structural HDL code into clean, frontend-usable metadata.
+- **Verilog Parsing** (`verilog_parser.py`): Extracts structural data from `.v` files.
+- **SDF Parsing** (`sdf_parser.py`): Extracts timing delays and constraints from `.sdf` files.
+- **Combining Data** (`combine_json.py`): Merges parsed structural and timing data into a unified pivot JSON format used by the frontend.
 
 #### How It Works
 
-The `parse_verilog()` function processes each Verilog file using **regular expressions** to extract relevant information. It is invoked on all `.v` files located in the `uploads/` directory and outputs corresponding `.json` files in `parsed_json/`.
+The parsing system operates in multiple stages:
+
+```
+uploads_v/            → parsed_v/     ┐
+uploads_sdf/          → parsed_sdf/   ├→ combine_json.py → combined_data/combined_design_data.json
+```
+
+- `verilog_parser.py` processes files in `uploads_v/`, creating JSON files in `parsed_v/`.
+- `sdf_parser.py` processes timing files from `uploads_sdf/`, creating JSON files in `parsed_sdf/`.
+- `combine_json.py` matches and merges corresponding JSONs, outputting to `combined_data/`.
 
 #### Parsing Features
 
-- **Module Declaration**:
-  - Extracts the module name and parameter list.
-- **Signal Categorization**:
-  - Detects `input`, `output`, and `logic` signals using pattern matching.
-- **Signal Assignments**:
-  - Recognizes both `assign` and `always` blocks for activity detection.
-- **DUT Identification**:
-  - Detects Device Under Test (DUT) ports, including implicit `.*` connections.
-- **BEL Type Inference**:
-  - Classifies the design as a Flip-Flop or LUT based on keywords and patterns.
+**Verilog Parser:**
 
-#### Output Format (Example)
+- Module name extraction
+- Input/output signals identification
+- Logic assignments and DUT signal detection
+- BEL type inference (Flip-Flop, LUT)
 
-```json
-{
-  "module": "1ff",
-  "inputs": ["clk", "D"],
-  "outputs": ["Q"],
-  "bel_type": "Flip-Flop"
-}
-```
+**SDF Parser:**
 
-#### File Workflow
+- Design name and timescale extraction
+- Cell-level timing delays (`IOPATH`)
+- Timing constraints (`TIMINGCHECK`)
 
-```
-uploads/
-├── 1ff.v
-├── 2ffs.v
-└── ...
-
-↓ Parsing step
-
-parsed_json/
-├── 1ff.json
-├── 2ffs.json
-└── ...
-```
-
-#### BEL Type Detection Logic
+#### BEL Type Detection Logic (Verilog)
 
 | Condition                                               | Detected BEL Type |
-| ------------------------------------------------------- | ----------------- |
+|---------------------------------------------------------|-------------------|
 | Uses `DFF`, `NX_DFF`, or `always @(posedge ...)`        | Flip-Flop         |
 | Uses `LUT_K`, `assign`, or logic expressions (`&`, `^`) | LUT               |
 
+---
+
 ## 6. Pivot Format Specification
 
-The **pivot format** is a simplified JSON representation of parsed Verilog and (optionally) SDF files. It serves as the main data interface between the backend and frontend and allows the visualization system to remain agnostic of HDL syntax.
+The **pivot format** is a simplified JSON combining parsed Verilog (structural) and SDF (timing) data.
 
-The pivot format includes structural metadata (BELs, nets) and optionally, temporal data (signal transitions) to support dynamic playback.
+### 6.1. Base Structure
+
+```json
+{
+  "module": "example_module",
+  "inputs": ["clk", "D"],
+  "outputs": ["Q"],
+  "bel_type": "Flip-Flop",
+  "timing": { /* Optional parsed SDF timing info */ }
+}
+```
 
 ### 6.1. Base Structure
 
@@ -406,20 +425,21 @@ Each parsed Verilog module is represented as a JSON object with the following ba
 
 #### Required Fields:
 
-| Field      | Type     | Description                                                            |
-| ---------- | -------- | ---------------------------------------------------------------------- |
-| `module`   | `string` | Name of the Verilog module                                             |
-| `inputs`   | `array`  | List of input ports                                                    |
-| `outputs`  | `array`  | List of output ports                                                   |
-| `bel_type` | `string` | High-level classification of the design (`"Flip-Flop"`, `"LUT"`, etc.) |
+| Field      | Type     | Description                                                             |
+|------------|----------|-------------------------------------------------------------------------|
+| `module`   | `string` | Name of the Verilog module                                              |
+| `inputs`   | `array`  | List of input ports                                                     |
+| `outputs`  | `array`  | List of output ports                                                    |
+| `bel_type` | `string` | High-level classification (`"Flip-Flop"`, `"LUT"`)                      |
+
 
 #### Optional Fields:
 
-| Field            | Type     | Description                                                  |
-| ---------------- | -------- | ------------------------------------------------------------ |
-| `nets`           | `array`  | List of internal signal names or net connections             |
-| `signal_history` | `object` | Maps signal names to time-indexed values (used for playback) |
-| `timing_info`    | `object` | Raw delay data parsed from SDF                               |
+| Field            | Type     | Description                                                           |
+|------------------|----------|-----------------------------------------------------------------------|
+| `timing`         | `object` | Parsed timing data (delays, constraints) from corresponding SDF files |
+| `nets`           | `array`  | Internal signals (if implemented in future)                           |
+| `signal_history` | `object` | Signal transitions (planned for future playback)                      |
 
 ### 6.3. Flip-Flop Example
 
@@ -430,7 +450,8 @@ This is a minimal example representing a **D Flip-Flop**. It includes one clock 
   "module": "1ff",
   "inputs": ["clk", "D"],
   "outputs": ["Q"],
-  "bel_type": "Flip-Flop"
+  "bel_type": "Flip-Flop",
+  "timing": null
 }
 ```
 
@@ -600,7 +621,6 @@ While the current implementation provides a functioning pipeline from Verilog to
 
 Several enhancements have been identified to expand the capabilities of the Web FPGA platform:
 
-- **SDF Integration**: Use actual propagation delays from SDF files to animate accurate timing behavior.
 - **Hierarchy Parsing**: Support multi-module designs and nested components.
 - **Advanced Signal Overlays**: Add net-level routing paths and multi-color signal animations.
 - **Verilog Editor in Browser**: Allow users to write and test Verilog directly in the frontend.
@@ -609,20 +629,3 @@ Several enhancements have been identified to expand the capabilities of the Web 
 - **Classroom Integration**: Add teacher dashboards, group activities, and exportable reports.
 
 > This roadmap aims to evolve the project into a complete educational FPGA simulator.
-
-## 12. Conclusion
-
-This is just the beginning.
-
-If you're reading this and you're curious, inspired, or just want to learn — we’d love your help.
-
-### How to Get Involved
-
-- Check out the issues and roadmap in the repository
-- Try running the simulator locally and suggest improvements
-- Submit pull requests for features, bugfixes, or documentation
-- Open discussions to share use cases, ideas, or educational needs
-
-> Web FPGA is built to teach and built to grow — together.
-
-Thanks for reading, and welcome to the project.
