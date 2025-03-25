@@ -20,7 +20,7 @@ function FPGALayout({ module }: Props) {
     if (!svgRef.current) return;
 
     const svg = d3.select(svgRef.current);
-    svg.selectAll("*").remove(); // Clear previous render
+    svg.selectAll("*").remove(); 
 
     const width = 500;
     const height = 500;
@@ -43,12 +43,26 @@ function FPGALayout({ module }: Props) {
       }
     }
 
-    // If module and timing cells exist, draw them
+    // Draw cells if timing data exists
     const cells = (module?.timing as { cells: TimingCell[] })?.cells;
     if (Array.isArray(cells)) {
       cells.forEach((cell: TimingCell, index: number) => {
-        const x = (index % cols) * cellSize;
-        const y = Math.floor(index / cols) * cellSize;
+        let xCoord: number, yCoord: number;
+
+        // Try to extract coordinates from the instance string
+        const match = cell.instance.match(/_(\d+)_(\d+)(?!.*\d)/);
+        if (match) {
+          xCoord = parseInt(match[1], 10);
+          yCoord = parseInt(match[2], 10);
+        } else {
+          // Fallback to index-based layout
+          xCoord = index % cols;
+          yCoord = Math.floor(index / cols);
+          console.warn("No coords found for instance:", cell.instance);
+        }
+
+        const x = xCoord * cellSize;
+        const y = yCoord * cellSize;
 
         svg.append("circle")
           .attr("cx", x + cellSize / 2)
@@ -66,10 +80,10 @@ function FPGALayout({ module }: Props) {
 
 function getColor(type: string): string {
   switch (type) {
-    case "DFF": return "#ff6f61";
-    case "LUT_K": return "#4fc3f7";
+    case "DFF": return "#ff6f61"; 
+    case "LUT_K": return "#4fc3f7"; 
     case "fpga_interconnect": return "#81c784";
-    default: return "#ce93d8";
+    default: return "#ce93d8"; 
   }
 }
 
