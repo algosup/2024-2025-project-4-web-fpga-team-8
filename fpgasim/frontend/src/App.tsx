@@ -41,7 +41,7 @@ function App(): React.JSX.Element {
 
       <ModuleInfo module={selectedModule} />
 
-      <FPGALayout />
+      <FPGALayout module={selectedModule} />
     </Container>
   );
 }
