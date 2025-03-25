@@ -2,21 +2,14 @@ import { Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import FileSelector from "./components/FileSelector";
 import FPGALayout from "./components/FPGALayout";
+import ModuleInfo from "./components/ModuleInfo";
+import { ModuleData } from "./types";
 
 const API_URL = "http://127.0.0.1:5000";
-
-export interface ModuleData {
-  module: string;
-  inputs: string[];
-  outputs: string[];
-  bel_type: string | null;
-  timing?: Record<string, unknown>;
-}
 
 function App(): React.JSX.Element {
   const [modules, setModules] = useState<ModuleData[]>([]);
   const [selectedModule, setSelectedModule] = useState<ModuleData | null>(null);
-  console.debug(selectedModule); // Avoid warning for now
 
   useEffect(() => {
     fetch(`${API_URL}/combined/combined_design_data.json`)
@@ -31,7 +24,6 @@ function App(): React.JSX.Element {
     console.log("Selected module data:", selected);
   };
 
-  // Extract unique module names and sort them alphabetically
   const uniqueSortedModuleNames = [
     ...new Set(modules.map((m) => m.module)),
   ].sort();
@@ -41,10 +33,14 @@ function App(): React.JSX.Element {
       <Typography variant="h4" gutterBottom>
         FPGA Simulator Interface
       </Typography>
+
       <FileSelector
         moduleNames={uniqueSortedModuleNames}
         onSelect={handleSelect}
       />
+
+      <ModuleInfo module={selectedModule} />
+
       <FPGALayout />
     </Container>
   );

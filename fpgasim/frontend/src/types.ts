@@ -24,4 +24,13 @@ export interface TimingDelay {
     bel_type: string | null;
     timing?: ModuleTiming | null;
   }
+
+  export interface ModuleData {
+    module: string;
+    inputs: string[];
+    outputs: string[];
+    bel_type: string | null;
+    timing?: Record<string, unknown>;
+  }
+  
   
