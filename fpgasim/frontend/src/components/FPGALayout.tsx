@@ -43,19 +43,18 @@ function FPGALayout({ module }: Props) {
       }
     }
 
-    // Draw cells if timing data exists
+    // Draw cells from timing data
     const cells = (module?.timing as { cells: TimingCell[] })?.cells;
     if (Array.isArray(cells)) {
       cells.forEach((cell: TimingCell, index: number) => {
-        let xCoord: number, yCoord: number;
+        let xCoord: number;
+        let yCoord: number;
 
-        // Try to extract coordinates from the instance string
         const match = cell.instance.match(/_(\d+)_(\d+)(?!.*\d)/);
         if (match) {
           xCoord = parseInt(match[1], 10);
           yCoord = parseInt(match[2], 10);
         } else {
-          // Fallback to index-based layout
           xCoord = index % cols;
           yCoord = Math.floor(index / cols);
           console.warn("No coords found for instance:", cell.instance);
@@ -73,6 +72,32 @@ function FPGALayout({ module }: Props) {
           .text(`${cell.cell_type}\n${cell.instance}`);
       });
     }
+
+    // Add legend
+    const legendData = [
+      { label: "DFF", color: "#ff6f61" },
+      { label: "LUT", color: "#4fc3f7" },
+      { label: "Interconnect", color: "#81c784" },
+    ];
+
+    const legend = svg.selectAll(".legend")
+      .data(legendData)
+      .enter()
+      .append("g")
+      .attr("class", "legend")
+      .attr("transform", (_, i) => `translate(${width - 100}, ${i * 20 + 10})`);
+
+    legend.append("rect")
+      .attr("width", 10)
+      .attr("height", 10)
+      .attr("fill", d => d.color);
+
+    legend.append("text")
+      .attr("x", 15)
+      .attr("y", 10)
+      .style("font-size", "10px")
+      .text(d => d.label);
+
   }, [module]);
 
   return <svg ref={svgRef}></svg>;
@@ -80,10 +105,10 @@ function FPGALayout({ module }: Props) {
 
 function getColor(type: string): string {
   switch (type) {
-    case "DFF": return "#ff6f61"; 
+    case "DFF": return "#ff6f61";
     case "LUT_K": return "#4fc3f7"; 
-    case "fpga_interconnect": return "#81c784";
-    default: return "#ce93d8"; 
+    case "fpga_interconnect": return "#81c784"; 
+    default: return "#ce93d8";
   }
 }
 
