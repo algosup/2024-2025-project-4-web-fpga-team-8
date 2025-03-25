@@ -36,7 +36,8 @@ function FPGALayout({ module }: Props) {
     // Draw grid
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
-        svg.append("rect")
+        svg
+          .append("rect")
           .attr("x", i * cellSize)
           .attr("y", j * cellSize)
           .attr("width", cellSize)
@@ -64,7 +65,8 @@ function FPGALayout({ module }: Props) {
         const x = xCoord * cellSize;
         const y = yCoord * cellSize;
 
-        svg.append("circle")
+        svg
+          .append("circle")
           .attr("cx", x + cellSize / 2)
           .attr("cy", y + cellSize / 2)
           .attr("r", cellSize / 3.5)
@@ -73,51 +75,100 @@ function FPGALayout({ module }: Props) {
           .text(`${cell.cell_type}\n${cell.instance}`);
       });
     }
-
-    // Legend
-    if (showLegend) {
-      const legendData = [
-        { label: "DFF", color: "#ff6f61" },
-        { label: "LUT", color: "#4fc3f7" },
-        { label: "Interconnect", color: "#81c784" },
-      ];
-
-      const legend = svg.selectAll(".legend")
-        .data(legendData)
-        .enter()
-        .append("g")
-        .attr("class", "legend")
-        .attr("transform", (_, i) => `translate(${width - 120}, ${i * 20 + 10})`);
-
-      legend.append("rect")
-        .attr("width", 10)
-        .attr("height", 10)
-        .attr("fill", d => d.color);
-
-      legend.append("text")
-        .attr("x", 15)
-        .attr("y", 10)
-        .style("font-size", "10px")
-        .text(d => d.label);
-    }
   }, [module, showLegend]);
 
   return (
-    <div>
-      <button onClick={() => setShowLegend(!showLegend)} style={{ marginBottom: "10px" }}>
-        {showLegend ? "Hide Legend" : "Show Legend"}
-      </button>
-      <svg ref={svgRef} style={{ width: "100%", height: "auto", display: "block" }} />
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <div style={{ position: "relative", width: "600px" }}>
+        <svg
+          ref={svgRef}
+          style={{
+            width: "100%",
+            height: "auto",
+            display: "block",
+          }}
+        />
+
+        {/* Legend + Toggle Container */}
+        <div
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            zIndex: 10,
+            padding: "12px",
+            borderRadius: "8px",
+            background: "#fff",
+            border: "1px solid #ccc",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+            width: "140px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "8px",
+            }}
+          >
+            <strong style={{ fontSize: "14px" }}>Legend</strong>
+            <button
+              onClick={() => setShowLegend(!showLegend)}
+              style={{
+                padding: "2px 6px",
+                fontSize: "11px",
+                borderRadius: "4px",
+                background: "#f3f3f3",
+                border: "1px solid #ccc",
+                cursor: "pointer",
+              }}
+            >
+              {showLegend ? "×" : "Show"}
+            </button>
+          </div>
+
+          {showLegend && (
+            <>
+              <LegendItem color="#ff6f61" label="DFF" />
+              <LegendItem color="#4fc3f7" label="LUT" />
+              <LegendItem color="#81c784" label="Interconnect" />
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LegendItem({ color, label }: { color: string; label: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", marginBottom: "6px" }}>
+      <div
+        style={{
+          width: "14px",
+          height: "14px",
+          backgroundColor: color,
+          marginRight: "8px",
+          borderRadius: "4px",
+          border: "1px solid #aaa",
+        }}
+      />
+      <span style={{ fontSize: "13px" }}>{label}</span>
     </div>
   );
 }
 
 function getColor(type: string): string {
   switch (type) {
-    case "DFF": return "#ff6f61";
-    case "LUT_K": return "#4fc3f7";
-    case "fpga_interconnect": return "#81c784";
-    default: return "#ce93d8";
+    case "DFF":
+      return "#ff6f61";
+    case "LUT_K":
+      return "#4fc3f7";
+    case "fpga_interconnect":
+      return "#81c784";
+    default:
+      return "#ce93d8";
   }
 }
 
