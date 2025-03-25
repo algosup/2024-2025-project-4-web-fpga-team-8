@@ -15,29 +15,30 @@ type TimingCell = {
 
 function FPGALayout({ module }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [showLegend, setShowLegend] = useState(true);
 
   useEffect(() => {
-    if (!svgRef.current) return;
+    if (!svgRef.current || !containerRef.current) return;
 
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
-    const container = svgRef.current.parentElement;
-    const width = container ? container.clientWidth : 600;
-    const height = 600;
+    const containerWidth = containerRef.current.clientWidth;
+    const maxGridWidth = 750;
+    const width = Math.min(containerWidth, maxGridWidth);
 
     const cols = 10;
     const rows = 10;
-    const cellSize = Math.min(width, height) / cols;
+    const cellSize = width / cols;
+    const height = cellSize * rows;
 
     svg.attr("width", width).attr("height", height);
 
     // Draw grid
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
-        svg
-          .append("rect")
+        svg.append("rect")
           .attr("x", i * cellSize)
           .attr("y", j * cellSize)
           .attr("width", cellSize)
@@ -51,7 +52,6 @@ function FPGALayout({ module }: Props) {
     if (Array.isArray(cells)) {
       cells.forEach((cell: TimingCell, index: number) => {
         let xCoord: number, yCoord: number;
-
         const match = cell.instance.match(/_(\d+)_(\d+)(?!.*\d)/);
         if (match) {
           xCoord = parseInt(match[1], 10);
@@ -65,8 +65,7 @@ function FPGALayout({ module }: Props) {
         const x = xCoord * cellSize;
         const y = yCoord * cellSize;
 
-        svg
-          .append("circle")
+        svg.append("circle")
           .attr("cx", x + cellSize / 2)
           .attr("cy", y + cellSize / 2)
           .attr("r", cellSize / 3.5)
@@ -78,8 +77,16 @@ function FPGALayout({ module }: Props) {
   }, [module, showLegend]);
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
-      <div style={{ position: "relative", width: "600px" }}>
+    <div style={{ display: "flex", justifyContent: "center", padding: "20px" }}>
+      <div
+        ref={containerRef}
+        style={{
+          position: "relative",
+          width: "100%",
+          maxWidth: "900px",
+          margin: "0 auto",
+        }}
+      >
         <svg
           ref={svgRef}
           style={{
@@ -89,7 +96,7 @@ function FPGALayout({ module }: Props) {
           }}
         />
 
-        {/* Legend + Toggle Container */}
+        {/* Legend box */}
         <div
           style={{
             position: "absolute",
