@@ -41,7 +41,6 @@ function FPGALayout({ module }: Props) {
 
     svg.attr("width", width).attr("height", height);
 
-    // Draw grid
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
         svg.append("rect")
@@ -78,7 +77,13 @@ function FPGALayout({ module }: Props) {
           .attr("r", cellSize / 3.5)
           .attr("fill", getColor(cell.cell_type))
           .attr("stroke", getStrokeColor(cell.cell_type))
-          .attr("stroke-width", 1.5);
+          .attr("stroke-width", 1.5)
+          .on("mouseover", function () {
+            d3.select(this).attr("stroke-width", 3);
+          })
+          .on("mouseout", function () {
+            d3.select(this).attr("stroke-width", 1.5);
+          });
 
         const formatSection = (
           data: Record<string, DelayValue | string>,
@@ -94,9 +99,9 @@ function FPGALayout({ module }: Props) {
               "typ" in value &&
               "max" in value
             ) {
-              lines.push(`    min: ${value.min}`);
-              lines.push(`    typ: ${value.typ}`);
-              lines.push(`    max: ${value.max}`);
+              lines.push(`    min: ${(value as DelayValue).min}`);
+              lines.push(`    typ: ${(value as DelayValue).typ}`);
+              lines.push(`    max: ${(value as DelayValue).max}`);
             } else {
               lines.push(`    ${value}`);
             }
@@ -123,7 +128,6 @@ function FPGALayout({ module }: Props) {
 
   return (
     <div style={{ position: "relative", padding: "20px" }}>
-      {/* Floating Legend */}
       <div
         style={{
           position: "absolute",
@@ -171,7 +175,6 @@ function FPGALayout({ module }: Props) {
         )}
       </div>
 
-      {/* Centered Grid Container */}
       <div
         ref={containerRef}
         style={{
