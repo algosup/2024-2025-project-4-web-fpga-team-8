@@ -6,11 +6,17 @@ interface Props {
   module: ModuleData | null;
 }
 
+type DelayValue = {
+  min: number;
+  typ: number;
+  max: number;
+};
+
 type TimingCell = {
   cell_type: string;
   instance: string;
-  delays: Record<string, unknown>;
-  constraints: Record<string, unknown>;
+  delays: Record<string, DelayValue | string>;
+  constraints: Record<string, DelayValue | string>;
 };
 
 function FPGALayout({ module }: Props) {
@@ -65,84 +71,124 @@ function FPGALayout({ module }: Props) {
         const x = xCoord * cellSize;
         const y = yCoord * cellSize;
 
-        svg.append("circle")
-          .attr("cx", x + cellSize / 2)
-          .attr("cy", y + cellSize / 2)
+        const group = svg.append("g")
+          .attr("transform", `translate(${x + cellSize / 2}, ${y + cellSize / 2})`);
+
+        group.append("circle")
           .attr("r", cellSize / 3.5)
           .attr("fill", getColor(cell.cell_type))
-          .append("title")
-          .text(`${cell.cell_type}\n${cell.instance}`);
+          .attr("stroke", getStrokeColor(cell.cell_type))
+          .attr("stroke-width", 1.5);
+
+        const formatSection = (
+          data: Record<string, DelayValue | string>,
+          sectionName: string
+        ): string => {
+          const lines: string[] = [`${sectionName}:`];
+          Object.entries(data).forEach(([label, value]) => {
+            lines.push(`  ${label}:`);
+            if (
+              typeof value === "object" &&
+              value !== null &&
+              "min" in value &&
+              "typ" in value &&
+              "max" in value
+            ) {
+              lines.push(`    min: ${value.min}`);
+              lines.push(`    typ: ${value.typ}`);
+              lines.push(`    max: ${value.max}`);
+            } else {
+              lines.push(`    ${value}`);
+            }
+          });
+          return lines.join("\n");
+        };
+
+        const tooltipText = [
+          `Type: ${cell.cell_type}`,
+          `Instance: ${cell.instance}`,
+          "",
+          Object.keys(cell.delays).length > 0
+            ? formatSection(cell.delays, "Delays")
+            : "Delays: N/A",
+          Object.keys(cell.constraints).length > 0
+            ? "\n" + formatSection(cell.constraints, "Constraints")
+            : ""
+        ].join("\n");
+
+        group.append("title").text(tooltipText);
       });
     }
   }, [module, showLegend]);
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", padding: "20px" }}>
+    <div style={{ position: "relative", padding: "20px" }}>
+      {/* Floating Legend */}
+      <div
+        style={{
+          position: "absolute",
+          top: "0",
+          right: "0",
+          zIndex: 10,
+          padding: "12px",
+          borderRadius: "8px",
+          background: "#fff",
+          border: "1px solid #ccc",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+          width: "140px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "8px",
+          }}
+        >
+          <strong style={{ fontSize: "14px" }}>Legend</strong>
+          <button
+            onClick={() => setShowLegend(!showLegend)}
+            style={{
+              padding: "2px 6px",
+              fontSize: "11px",
+              borderRadius: "4px",
+              background: "#f3f3f3",
+              border: "1px solid #ccc",
+              cursor: "pointer",
+            }}
+          >
+            {showLegend ? "×" : "Show"}
+          </button>
+        </div>
+
+        {showLegend && (
+          <>
+            <LegendItem color="#ff6f61" label="DFF" />
+            <LegendItem color="#4fc3f7" label="LUT" />
+            <LegendItem color="#81c784" label="Interconnect" />
+          </>
+        )}
+      </div>
+
+      {/* Centered Grid Container */}
       <div
         ref={containerRef}
         style={{
-          position: "relative",
-          width: "100%",
-          maxWidth: "900px",
-          margin: "0 auto",
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "60px",
         }}
       >
         <svg
           ref={svgRef}
           style={{
             width: "100%",
+            maxWidth: "750px",
             height: "auto",
             display: "block",
           }}
         />
-
-        {/* Legend box */}
-        <div
-          style={{
-            position: "absolute",
-            top: "10px",
-            right: "10px",
-            zIndex: 10,
-            padding: "12px",
-            borderRadius: "8px",
-            background: "#fff",
-            border: "1px solid #ccc",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            width: "140px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "8px",
-            }}
-          >
-            <strong style={{ fontSize: "14px" }}>Legend</strong>
-            <button
-              onClick={() => setShowLegend(!showLegend)}
-              style={{
-                padding: "2px 6px",
-                fontSize: "11px",
-                borderRadius: "4px",
-                background: "#f3f3f3",
-                border: "1px solid #ccc",
-                cursor: "pointer",
-              }}
-            >
-              {showLegend ? "×" : "Show"}
-            </button>
-          </div>
-
-          {showLegend && (
-            <>
-              <LegendItem color="#ff6f61" label="DFF" />
-              <LegendItem color="#4fc3f7" label="LUT" />
-              <LegendItem color="#81c784" label="Interconnect" />
-            </>
-          )}
-        </div>
       </div>
     </div>
   );
@@ -176,6 +222,19 @@ function getColor(type: string): string {
       return "#81c784";
     default:
       return "#ce93d8";
+  }
+}
+
+function getStrokeColor(type: string): string {
+  switch (type) {
+    case "DFF":
+      return "#b71c1c";
+    case "LUT_K":
+      return "#0d47a1";
+    case "fpga_interconnect":
+      return "#1b5e20";
+    default:
+      return "#6a1b9a";
   }
 }
 
