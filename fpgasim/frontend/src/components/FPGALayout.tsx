@@ -62,6 +62,26 @@ function FPGALayout({ module }: Props) {
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
+    // Layering: grid -> arrows -> nodes
+    const gridGroup = svg.append("g").attr("class", "grid-layer");
+    const arrowGroup = svg.append("g").attr("class", "arrow-layer");
+    const nodeGroup = svg.append("g").attr("class", "node-layer");
+
+    // Define arrow marker
+    arrowGroup
+      .append("defs")
+      .append("marker")
+      .attr("id", "arrow")
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 6)
+      .attr("refY", 0)
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("orient", "auto")
+      .append("path")
+      .attr("d", "M0,-5L10,0L0,5")
+      .attr("fill", "#888");
+
     const containerWidth = containerRef.current.clientWidth;
     const maxGridWidth = 750;
     const width = Math.min(containerWidth, maxGridWidth);
@@ -76,7 +96,7 @@ function FPGALayout({ module }: Props) {
     // Grid
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
-        svg
+        gridGroup
           .append("rect")
           .attr("x", i * cellSize)
           .attr("y", j * cellSize)
@@ -87,7 +107,38 @@ function FPGALayout({ module }: Props) {
       }
     }
 
-    // Nodes
+    // Draw signal path arrows
+    for (let i = 0; i < signalPath.length - 1; i++) {
+      const from = signalPath[i];
+      const to = signalPath[i + 1];
+
+      const fromMatch = from.instance.match(/_(\d+)_(\d+)(?!.*\d)/);
+      const toMatch = to.instance.match(/_(\d+)_(\d+)(?!.*\d)/);
+
+      const [fromXGrid, fromYGrid] = fromMatch
+        ? [parseInt(fromMatch[1], 10), parseInt(fromMatch[2], 10)]
+        : [from.index % cols, Math.floor(from.index / cols)];
+
+      const [toXGrid, toYGrid] = toMatch
+        ? [parseInt(toMatch[1], 10), parseInt(toMatch[2], 10)]
+        : [to.index % cols, Math.floor(to.index / cols)];
+
+      const fromX = fromXGrid * cellSize + cellSize / 2;
+      const fromY = fromYGrid * cellSize + cellSize / 2;
+      const toX = toXGrid * cellSize + cellSize / 2;
+      const toY = toYGrid * cellSize + cellSize / 2;
+
+      arrowGroup
+        .append("line")
+        .attr("x1", fromX)
+        .attr("y1", fromY)
+        .attr("x2", toX)
+        .attr("y2", toY)
+        .attr("stroke", "#888")
+        .attr("stroke-width", 2)
+        .attr("marker-end", "url(#arrow)");
+    }
+
     cells.forEach((cell, index) => {
       let xCoord: number, yCoord: number;
       const match = cell.instance.match(/_(\d+)_(\d+)(?!.*\d)/);
@@ -103,8 +154,12 @@ function FPGALayout({ module }: Props) {
       const y = yCoord * cellSize;
       const isActive = index === signalPath[currentStep]?.index;
 
-      const group = svg.append("g")
-        .attr("transform", `translate(${x + cellSize / 2}, ${y + cellSize / 2})`);
+      const group = nodeGroup
+        .append("g")
+        .attr(
+          "transform",
+          `translate(${x + cellSize / 2}, ${y + cellSize / 2})`
+        );
 
       const circle = group
         .append("circle")
@@ -135,7 +190,15 @@ function FPGALayout({ module }: Props) {
           .style("fill", "#333");
       }
     });
-  }, [module, showLegend, currentStep, cells, signalPath, isPlaying, zoomLevel]);
+  }, [
+    module,
+    showLegend,
+    currentStep,
+    cells,
+    signalPath,
+    isPlaying,
+    zoomLevel,
+  ]);
 
   return (
     <div style={{ position: "relative", padding: "20px" }}>
@@ -221,8 +284,18 @@ function FPGALayout({ module }: Props) {
           <option value={4}>x4</option>
         </select>
 
-        <button onClick={() => setZoomLevel((z) => Math.min(z * 1.2, 5))} style={buttonStyle}>＋</button>
-        <button onClick={() => setZoomLevel((z) => Math.max(z / 1.2, 1))} style={buttonStyle}>－</button>
+        <button
+          onClick={() => setZoomLevel((z) => Math.min(z * 1.2, 5))}
+          style={buttonStyle}
+        >
+          ＋
+        </button>
+        <button
+          onClick={() => setZoomLevel((z) => Math.max(z / 1.2, 1))}
+          style={buttonStyle}
+        >
+          －
+        </button>
       </div>
 
       {/* Canvas */}
@@ -257,7 +330,7 @@ const buttonStyle = {
   border: "none",
   borderRadius: "4px",
   cursor: "pointer",
-  fontSize: "13px"
+  fontSize: "13px",
 };
 
 function LegendItem({ color, label }: { color: string; label: string }) {
