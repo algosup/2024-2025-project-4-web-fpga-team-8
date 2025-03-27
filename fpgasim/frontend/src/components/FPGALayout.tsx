@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { ModuleData } from "../types";
 
 interface Props {
@@ -22,7 +22,37 @@ type TimingCell = {
 function FPGALayout({ module }: Props) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+
   const [showLegend, setShowLegend] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const cells = useMemo(() => {
+    return (module?.timing as { cells: TimingCell[] })?.cells || [];
+  }, [module]);
+
+  const signalPath = useMemo(() => {
+    return cells.map((cell, index) => ({ ...cell, index }));
+  }, [cells]);
+
+  // Animation effect
+  useEffect(() => {
+    if (!isPlaying || signalPath.length === 0) return;
+
+    const current = signalPath[currentStep];
+    const delay = getTypDelay(current?.delays);
+
+    const timer = setTimeout(() => {
+      if (currentStep < signalPath.length - 1) {
+        setCurrentStep((prev) => prev + 1);
+      } else {
+        setIsPlaying(false);
+        setCurrentStep(0);
+      }
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [isPlaying, currentStep, signalPath]);
 
   useEffect(() => {
     if (!svgRef.current || !containerRef.current) return;
@@ -41,9 +71,11 @@ function FPGALayout({ module }: Props) {
 
     svg.attr("width", width).attr("height", height);
 
+    // Grid
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
-        svg.append("rect")
+        svg
+          .append("rect")
           .attr("x", i * cellSize)
           .attr("y", j * cellSize)
           .attr("width", cellSize)
@@ -53,81 +85,53 @@ function FPGALayout({ module }: Props) {
       }
     }
 
-    const cells = (module?.timing as { cells: TimingCell[] })?.cells;
-    if (Array.isArray(cells)) {
-      cells.forEach((cell: TimingCell, index: number) => {
-        let xCoord: number, yCoord: number;
-        const match = cell.instance.match(/_(\d+)_(\d+)(?!.*\d)/);
-        if (match) {
-          xCoord = parseInt(match[1], 10);
-          yCoord = parseInt(match[2], 10);
-        } else {
-          xCoord = index % cols;
-          yCoord = Math.floor(index / cols);
-          console.warn("No coords found for instance:", cell.instance);
-        }
+    // Nodes
+    cells.forEach((cell, index) => {
+      let xCoord: number, yCoord: number;
+      const match = cell.instance.match(/_(\d+)_(\d+)(?!.*\d)/);
+      if (match) {
+        xCoord = parseInt(match[1], 10);
+        yCoord = parseInt(match[2], 10);
+      } else {
+        xCoord = index % cols;
+        yCoord = Math.floor(index / cols);
+      }
 
-        const x = xCoord * cellSize;
-        const y = yCoord * cellSize;
+      const x = xCoord * cellSize;
+      const y = yCoord * cellSize;
+      const isActive = index === signalPath[currentStep]?.index;
 
-        const group = svg.append("g")
-          .attr("transform", `translate(${x + cellSize / 2}, ${y + cellSize / 2})`);
+      const group = svg
+        .append("g")
+        .attr(
+          "transform",
+          `translate(${x + cellSize / 2}, ${y + cellSize / 2})`
+        );
 
-        group.append("circle")
-          .attr("r", cellSize / 3.5)
-          .attr("fill", getColor(cell.cell_type))
-          .attr("stroke", getStrokeColor(cell.cell_type))
-          .attr("stroke-width", 1.5)
+      const circle = group
+        .append("circle")
+        .attr("r", cellSize / 3.5)
+        .attr("fill", getColor(cell.cell_type))
+        .attr("stroke", isActive ? "#FFD700" : getStrokeColor(cell.cell_type))
+        .attr("stroke-width", isActive ? 4 : 1.5);
+
+      if (!isPlaying) {
+        circle
           .on("mouseover", function () {
             d3.select(this).attr("stroke-width", 3);
           })
           .on("mouseout", function () {
             d3.select(this).attr("stroke-width", 1.5);
           });
+      }
 
-        const formatSection = (
-          data: Record<string, DelayValue | string>,
-          sectionName: string
-        ): string => {
-          const lines: string[] = [`${sectionName}:`];
-          Object.entries(data).forEach(([label, value]) => {
-            lines.push(`  ${label}:`);
-            if (
-              typeof value === "object" &&
-              value !== null &&
-              "min" in value &&
-              "typ" in value &&
-              "max" in value
-            ) {
-              lines.push(`    min: ${(value as DelayValue).min}`);
-              lines.push(`    typ: ${(value as DelayValue).typ}`);
-              lines.push(`    max: ${(value as DelayValue).max}`);
-            } else {
-              lines.push(`    ${value}`);
-            }
-          });
-          return lines.join("\n");
-        };
-
-        const tooltipText = [
-          `Type: ${cell.cell_type}`,
-          `Instance: ${cell.instance}`,
-          "",
-          Object.keys(cell.delays).length > 0
-            ? formatSection(cell.delays, "Delays")
-            : "Delays: N/A",
-          Object.keys(cell.constraints).length > 0
-            ? "\n" + formatSection(cell.constraints, "Constraints")
-            : ""
-        ].join("\n");
-
-        group.append("title").text(tooltipText);
-      });
-    }
-  }, [module, showLegend]);
+      group.append("title").text(getTooltip(cell));
+    });
+  }, [module, showLegend, currentStep, cells, signalPath, isPlaying]);
 
   return (
     <div style={{ position: "relative", padding: "20px" }}>
+      {/* Legend */}
       <div
         style={{
           position: "absolute",
@@ -142,23 +146,14 @@ function FPGALayout({ module }: Props) {
           width: "140px",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "8px",
-          }}
-        >
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
           <strong style={{ fontSize: "14px" }}>Legend</strong>
           <button
             onClick={() => setShowLegend(!showLegend)}
             style={{
-              padding: "2px 6px",
               fontSize: "11px",
-              borderRadius: "4px",
-              background: "#f3f3f3",
-              border: "1px solid #ccc",
+              border: "none",
+              background: "transparent",
               cursor: "pointer",
             }}
           >
@@ -175,12 +170,33 @@ function FPGALayout({ module }: Props) {
         )}
       </div>
 
+      {/* Controls */}
+      <div style={{ marginBottom: "12px" }}>
+        <button
+          onClick={() => {
+            setIsPlaying(true);
+            setCurrentStep(0);
+          }}
+          style={{
+            padding: "6px 12px",
+            backgroundColor: "#1976d2",
+            color: "#fff",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          Play
+        </button>
+      </div>
+
+      {/* Canvas */}
       <div
         ref={containerRef}
         style={{
           display: "flex",
           justifyContent: "center",
-          marginTop: "60px",
+          marginTop: "20px",
         }}
       >
         <svg
@@ -196,6 +212,8 @@ function FPGALayout({ module }: Props) {
     </div>
   );
 }
+
+// ========== Utilities ==========
 
 function LegendItem({ color, label }: { color: string; label: string }) {
   return (
@@ -239,6 +257,52 @@ function getStrokeColor(type: string): string {
     default:
       return "#6a1b9a";
   }
+}
+
+function getTooltip(cell: TimingCell): string {
+  const formatSection = (
+    data: Record<string, DelayValue | string>,
+    title: string
+  ): string => {
+    const lines = [`${title}:`];
+    for (const [key, val] of Object.entries(data)) {
+      lines.push(`  ${key}:`);
+      if (
+        typeof val === "object" &&
+        "min" in val &&
+        "typ" in val &&
+        "max" in val
+      ) {
+        lines.push(`    min: ${val.min}`);
+        lines.push(`    typ: ${val.typ}`);
+        lines.push(`    max: ${val.max}`);
+      } else {
+        lines.push(`    ${val}`);
+      }
+    }
+    return lines.join("\n");
+  };
+
+  return [
+    `Type: ${cell.cell_type}`,
+    `Instance: ${cell.instance}`,
+    "",
+    Object.keys(cell.delays).length
+      ? formatSection(cell.delays, "Delays")
+      : "Delays: N/A",
+    Object.keys(cell.constraints).length
+      ? formatSection(cell.constraints, "Constraints")
+      : "",
+  ].join("\n");
+}
+
+function getTypDelay(delays: Record<string, DelayValue | string> = {}): number {
+  for (const val of Object.values(delays)) {
+    if (typeof val === "object" && "typ" in val) {
+      return val.typ;
+    }
+  }
+  return 500;
 }
 
 export default FPGALayout;
