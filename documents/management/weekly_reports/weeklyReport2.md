@@ -15,11 +15,10 @@ Created by: Quentin CLÉMENT <br> Creation Date: 03/03/2025 <br> Last Update: 07
 - [1. Overall Project Status Summary](#1-overall-project-status-summary)
 - [2. Milestones Met This Week](#2-milestones-met-this-week)
 - [3. Timeline Status](#3-timeline-status)
-- [4. Absenteeism Report](#4-absenteeism-report)
-- [5. Scope Status](#5-scope-status)
-- [6. Work Accomplished](#6-work-accomplished)
-- [7. Next Steps](#7-next-steps)
-- [8. Team Feedback](#8-team-feedback)
+- [4. Scope Status](#4-scope-status)
+- [5. Work Accomplished](#5-work-accomplished)
+- [6. Next Steps](#6-next-steps)
+- [7. Team Feedback](#7-team-feedback)
 
 </details>
 
@@ -39,15 +38,11 @@ The drafting of key project documents has begun and is progressing well. The tec
 
 At this stage, it is difficult to accurately assess our position in the timeline due to the limited project time so far. Next week, as the team begins tackling initial development challenges, we will be better positioned to evaluate our progress and any potential risks to the schedule.  
 
-## 4. Absenteeism Report  
-
-- **07/03:** **Pavlo PRENDI**  
-
-## 5. Scope Status  
+## 4. Scope Status  
 
 The project scope, as defined during the **kick-off meeting**, is documented in the **project charter**. However, given that we are still in the early stages, adjustments may be necessary as requirements become clearer.  
 
-## 6. Work Accomplished  
+## 5. Work Accomplished  
 
 ➭ <ins>**Documentation**<ins>:  
 
@@ -63,14 +58,15 @@ The project scope, as defined during the **kick-off meeting**, is documented in 
 
 - ✅ **Familiarization with technologies** – _David CUAHONTE CUEVAS_  
 
-## 7. Next Steps  
+## 6. Next Steps  
 
 - 📅 **13/03/2025: Deliver Functional Specification v1.0** – _Mariem ZAIANE_  
 - 📝 **Continue writing the Technical Specification** – _Victor LEROY_  
 - 📝 **Develop the Test Plan** – _Pavlo PRENDI_  
+- 🧪 **Proceed to the First Test Set** – _Pavlo PRENDI_  
 - 📊 **Continue refining project management artifacts** (_Project Charter, Risk Management Plan, KPIs_) – _Quentin CLÉMENT_  
 - ⚙️ **Begin work on input processing** – _David CUAHONTE CUEVAS_  
 
-## 8. Team Feedback  
+## 7. Team Feedback  
 
 The second week marked a turning point as we formally initiated the project with a structured **kick-off meeting**. Although absenteeism and limited availability continued to be challenges, the team made solid progress in preparing foundational documents.  
