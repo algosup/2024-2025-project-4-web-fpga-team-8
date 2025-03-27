@@ -26,6 +26,7 @@ function FPGALayout({ module }: Props) {
   const [showLegend, setShowLegend] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [speed, setSpeed] = useState(1);
 
   const cells = useMemo(() => {
     return (module?.timing as { cells: TimingCell[] })?.cells || [];
@@ -40,7 +41,7 @@ function FPGALayout({ module }: Props) {
     if (!isPlaying || signalPath.length === 0) return;
 
     const current = signalPath[currentStep];
-    const delay = getTypDelay(current?.delays);
+    const delay = getTypDelay(current?.delays) / speed;
 
     const timer = setTimeout(() => {
       if (currentStep < signalPath.length - 1) {
@@ -52,7 +53,7 @@ function FPGALayout({ module }: Props) {
     }, delay);
 
     return () => clearTimeout(timer);
-  }, [isPlaying, currentStep, signalPath]);
+  }, [isPlaying, currentStep, signalPath, speed]);
 
   useEffect(() => {
     if (!svgRef.current || !containerRef.current) return;
@@ -101,8 +102,7 @@ function FPGALayout({ module }: Props) {
       const y = yCoord * cellSize;
       const isActive = index === signalPath[currentStep]?.index;
 
-      const group = svg
-        .append("g")
+      const group = svg.append("g")
         .attr(
           "transform",
           `translate(${x + cellSize / 2}, ${y + cellSize / 2})`
@@ -171,23 +171,50 @@ function FPGALayout({ module }: Props) {
       </div>
 
       {/* Controls */}
-      <div style={{ marginBottom: "12px" }}>
+      <div style={{ marginBottom: "12px", display: "flex", gap: "12px" }}>
         <button
           onClick={() => {
             setIsPlaying(true);
             setCurrentStep(0);
           }}
-          style={{
-            padding: "6px 12px",
-            backgroundColor: "#1976d2",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
+          style={buttonStyle}
         >
           Play
         </button>
+
+        <button
+          onClick={() => setIsPlaying(false)}
+          style={buttonStyle}
+        >
+          Pause
+        </button>
+
+        <button
+          onClick={() => {
+            setIsPlaying(false);
+            if (currentStep < signalPath.length - 1) {
+              setCurrentStep((prev) => prev + 1);
+            }
+          }}
+          style={buttonStyle}
+        >
+          Step
+        </button>
+
+        <select
+          value={speed}
+          onChange={(e) => setSpeed(parseInt(e.target.value))}
+          style={{
+            ...buttonStyle,
+            padding: "6px",
+            fontSize: "13px",
+            width: "60px",
+          }}
+        >
+          <option value={1}>x1</option>
+          <option value={2}>x2</option>
+          <option value={4}>x4</option>
+        </select>
       </div>
 
       {/* Canvas */}
@@ -214,6 +241,16 @@ function FPGALayout({ module }: Props) {
 }
 
 // ========== Utilities ==========
+
+const buttonStyle = {
+  padding: "6px 12px",
+  backgroundColor: "#1976d2",
+  color: "#fff",
+  border: "none",
+  borderRadius: "4px",
+  cursor: "pointer",
+  fontSize: "13px"
+};
 
 function LegendItem({ color, label }: { color: string; label: string }) {
   return (
