@@ -102,7 +102,8 @@ function FPGALayout({ module }: Props) {
       const y = yCoord * cellSize;
       const isActive = index === signalPath[currentStep]?.index;
 
-      const group = svg.append("g")
+      const group = svg
+        .append("g")
         .attr(
           "transform",
           `translate(${x + cellSize / 2}, ${y + cellSize / 2})`
@@ -126,6 +127,16 @@ function FPGALayout({ module }: Props) {
       }
 
       group.append("title").text(getTooltip(cell));
+
+      if (isActive) {
+        group
+          .append("text")
+          .text("Active")
+          .attr("text-anchor", "middle")
+          .attr("dy", cellSize / 2 + 12)
+          .style("font-size", "10px")
+          .style("fill", "#333");
+      }
     });
   }, [module, showLegend, currentStep, cells, signalPath, isPlaying]);
 
@@ -182,10 +193,7 @@ function FPGALayout({ module }: Props) {
           Play
         </button>
 
-        <button
-          onClick={() => setIsPlaying(false)}
-          style={buttonStyle}
-        >
+        <button onClick={() => setIsPlaying(false)} style={buttonStyle}>
           Pause
         </button>
 
@@ -249,7 +257,7 @@ const buttonStyle = {
   border: "none",
   borderRadius: "4px",
   cursor: "pointer",
-  fontSize: "13px"
+  fontSize: "13px",
 };
 
 function LegendItem({ color, label }: { color: string; label: string }) {
