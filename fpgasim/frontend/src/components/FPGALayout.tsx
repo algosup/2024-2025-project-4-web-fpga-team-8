@@ -27,6 +27,7 @@ function FPGALayout({ module }: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [speed, setSpeed] = useState(1);
+  const [zoomLevel, setZoomLevel] = useState(1);
 
   const cells = useMemo(() => {
     return (module?.timing as { cells: TimingCell[] })?.cells || [];
@@ -67,7 +68,7 @@ function FPGALayout({ module }: Props) {
 
     const cols = 10;
     const rows = 10;
-    const cellSize = width / cols;
+    const cellSize = (width / cols) * zoomLevel;
     const height = cellSize * rows;
 
     svg.attr("width", width).attr("height", height);
@@ -102,12 +103,8 @@ function FPGALayout({ module }: Props) {
       const y = yCoord * cellSize;
       const isActive = index === signalPath[currentStep]?.index;
 
-      const group = svg
-        .append("g")
-        .attr(
-          "transform",
-          `translate(${x + cellSize / 2}, ${y + cellSize / 2})`
-        );
+      const group = svg.append("g")
+        .attr("transform", `translate(${x + cellSize / 2}, ${y + cellSize / 2})`);
 
       const circle = group
         .append("circle")
@@ -138,7 +135,7 @@ function FPGALayout({ module }: Props) {
           .style("fill", "#333");
       }
     });
-  }, [module, showLegend, currentStep, cells, signalPath, isPlaying]);
+  }, [module, showLegend, currentStep, cells, signalPath, isPlaying, zoomLevel]);
 
   return (
     <div style={{ position: "relative", padding: "20px" }}>
@@ -223,6 +220,9 @@ function FPGALayout({ module }: Props) {
           <option value={2}>x2</option>
           <option value={4}>x4</option>
         </select>
+
+        <button onClick={() => setZoomLevel((z) => Math.min(z * 1.2, 5))} style={buttonStyle}>＋</button>
+        <button onClick={() => setZoomLevel((z) => Math.max(z / 1.2, 1))} style={buttonStyle}>－</button>
       </div>
 
       {/* Canvas */}
@@ -257,7 +257,7 @@ const buttonStyle = {
   border: "none",
   borderRadius: "4px",
   cursor: "pointer",
-  fontSize: "13px",
+  fontSize: "13px"
 };
 
 function LegendItem({ color, label }: { color: string; label: string }) {
