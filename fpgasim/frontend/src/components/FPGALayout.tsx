@@ -22,14 +22,17 @@ function FPGALayout({ module }: Props) {
   const [speed, setSpeed] = useState(1);
   const [zoomLevel, setZoomLevel] = useState(1);
 
+  // Extract cell data from the timing section
   const cells = useMemo(() => {
     return (module?.timing as { cells: TimingCell[] })?.cells || [];
   }, [module]);
 
+  // Build an ordered path for signal traversal
   const signalPath = useMemo(() => {
     return cells.map((cell, index) => ({ ...cell, index }));
   }, [cells]);
 
+  // Playback animation loop
   useEffect(() => {
     if (!isPlaying || signalPath.length === 0) return;
 
@@ -48,6 +51,7 @@ function FPGALayout({ module }: Props) {
     return () => clearTimeout(timer);
   }, [isPlaying, currentStep, signalPath, speed]);
 
+  // Render grid, arrows, and nodes
   useEffect(() => {
     if (!svgRef.current || !containerRef.current) return;
 
@@ -58,6 +62,7 @@ function FPGALayout({ module }: Props) {
     const arrowGroup = svg.append("g").attr("class", "arrow-layer");
     const nodeGroup = svg.append("g").attr("class", "node-layer");
 
+    // Define reusable arrow marker
     arrowGroup
       .append("defs")
       .append("marker")

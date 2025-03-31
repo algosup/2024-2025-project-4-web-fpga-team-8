@@ -38,11 +38,12 @@ function PlaybackControls({
       <button
         onClick={onStep}
         style={buttonStyle}
-        disabled={currentStep >= totalSteps - 1}
+        disabled={currentStep >= totalSteps - 1} // Disable when at the last step
       >
         Step
       </button>
 
+      {/* Speed selector */}
       <select
         value={speed}
         onChange={(e) => onSpeedChange(parseInt(e.target.value))}

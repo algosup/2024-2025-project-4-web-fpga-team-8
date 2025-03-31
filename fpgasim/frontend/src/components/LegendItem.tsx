@@ -3,6 +3,7 @@ interface Props {
   label: string;
 }
 
+// Displays a colored box and label for a legend entry
 function LegendItem({ color, label }: Props) {
   return (
     <div style={{ display: "flex", alignItems: "center", marginBottom: "6px" }}>

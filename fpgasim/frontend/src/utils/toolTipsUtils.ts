@@ -6,6 +6,7 @@ type DelayValue = {
   max: number;
 };
 
+// Formats a tooltip string for a given timing cell, including delays and constraints
 export function getTooltip(cell: TimingCell): string {
   const formatSection = (
     data: Record<string, string | DelayValue>,

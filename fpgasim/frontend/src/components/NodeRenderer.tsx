@@ -3,7 +3,6 @@ import { getColor, getStrokeColor } from "../utils/colorsUtils";
 import { getTooltip } from "../utils/toolTipsUtils";
 import { TimingCell } from "../types";
 
-// If you rely on `.index`, extend the base TimingCell type
 type ExtendedTimingCell = TimingCell & { index?: number };
 
 export function renderNodes(
@@ -34,6 +33,7 @@ export function renderNodes(
       .attr("stroke", isActive ? "#FFD700" : getStrokeColor(cell.cell_type))
       .attr("stroke-width", isActive ? 4 : 1.5);
 
+    // Add hover effect when animation is paused
     if (!isPlaying) {
       circle
         .on("mouseover", function () {

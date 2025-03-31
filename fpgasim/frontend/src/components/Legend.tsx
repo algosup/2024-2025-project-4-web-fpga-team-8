@@ -1,4 +1,3 @@
-import React from "react";
 import LegendItem from "./LegendItem";
 
 interface Props {
@@ -6,6 +5,7 @@ interface Props {
   onToggle: () => void;
 }
 
+// Renders the FPGA legend panel with a toggleable display
 function Legend({ showLegend, onToggle }: Props) {
   return (
     <div

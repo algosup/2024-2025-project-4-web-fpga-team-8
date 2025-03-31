@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 
+// Draws a grid of rectangles representing the FPGA layout
 export function renderGrid(
   gridGroup: d3.Selection<SVGGElement, unknown, null, undefined>,
   cols: number,

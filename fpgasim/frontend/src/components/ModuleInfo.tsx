@@ -14,6 +14,7 @@ function ModuleInfo({ module }: Props) {
         Module: {module.module}
       </Typography>
 
+      {/* Display input signal chips */}
       <Typography variant="subtitle1">Inputs:</Typography>
       <Stack direction="row" spacing={1} flexWrap="wrap" marginBottom={1}>
         {module.inputs.map((input: string) => (
@@ -21,6 +22,7 @@ function ModuleInfo({ module }: Props) {
         ))}
       </Stack>
 
+      {/* Display output signal chips */}
       <Typography variant="subtitle1">Outputs:</Typography>
       <Stack direction="row" spacing={1} flexWrap="wrap" marginBottom={1}>
         {module.outputs.map((output: string) => (

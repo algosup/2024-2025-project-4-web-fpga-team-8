@@ -12,8 +12,8 @@ function FileSelector({ moduleNames, onSelect }: Props) {
 
   const handleChange = (e: SelectChangeEvent<string>) => {
     const value = e.target.value;
-    setSelected(value);
-    onSelect(value);
+    setSelected(value);        // Update local UI state
+    onSelect(value);           // Notify parent of selection change
   };
 
   return (
