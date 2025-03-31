@@ -19,7 +19,6 @@ export function renderArrows(
     const fromMatch = from.instance.match(/_(\d+)_(\d+)(?!.*\d)/);
     const toMatch = to.instance.match(/_(\d+)_(\d+)(?!.*\d)/);
 
-    // Fallback to index-based coordinates if no match
     const [fromXGrid, fromYGrid] = fromMatch
       ? [parseInt(fromMatch[1], 10), parseInt(fromMatch[2], 10)]
       : [from.index % cols, Math.floor(from.index / cols)];
@@ -28,13 +27,11 @@ export function renderArrows(
       ? [parseInt(toMatch[1], 10), parseInt(toMatch[2], 10)]
       : [to.index % cols, Math.floor(to.index / cols)];
 
-    // Center the arrows in each cell
     const fromX = fromXGrid * cellSize + cellSize / 2;
     const fromY = fromYGrid * cellSize + cellSize / 2;
     const toX = toXGrid * cellSize + cellSize / 2;
     const toY = toYGrid * cellSize + cellSize / 2;
 
-    // Draw arrow line
     arrowGroup
       .append("line")
       .attr("x1", fromX)
