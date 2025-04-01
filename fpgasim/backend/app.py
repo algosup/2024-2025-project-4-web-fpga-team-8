@@ -2,14 +2,14 @@ from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 
+from combine_json import merge_designs
+
 app = Flask(__name__)
 CORS(app)
 
-# Define folders
 UPLOAD_FOLDER = "uploads"
-COMBINED_FOLDER = "combined_data"  # NEW folder to store the combined json
+COMBINED_FOLDER = "combined_data"
 
-# Register folders in config (optional, but nice to have)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["COMBINED_FOLDER"] = COMBINED_FOLDER
 
@@ -27,4 +27,5 @@ def get_combined_file(filename):
     return send_from_directory(app.config["COMBINED_FOLDER"], filename)
 
 if __name__ == "__main__":
+    merge_designs()  
     app.run(debug=True, port=5000)

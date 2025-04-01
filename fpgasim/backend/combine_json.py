@@ -3,7 +3,7 @@ import json
 
 VERILOG_JSON_DIR = "parsed_v"
 SDF_JSON_DIR = "parsed_sdf"
-OUTPUT_FILE = "combined_design_data.json"
+OUTPUT_FILE = os.path.join("combined_data", "combined_design_data.json")
 
 IGNORE_MODULES = {"routed_POC_worst"}
 
