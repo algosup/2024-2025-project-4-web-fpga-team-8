@@ -1,3 +1,4 @@
+
 # Uploaded SDF and Verilog files
 backend/uploads_sdf/
 backend/uploads_v/
@@ -5,7 +6,6 @@ backend/uploads_v/
 # Parsed output files (e.g. .json from SDF parsing)
 backend/parsed_sdf/
 backend/parsed_json/
-
 
 # Logs
 logs

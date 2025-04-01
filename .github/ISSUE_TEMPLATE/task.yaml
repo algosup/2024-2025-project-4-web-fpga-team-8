@@ -1,0 +1,33 @@
+name: Task
+description: Use this template to create a new task.
+title: "[Task]:"
+labels: ["task"]
+body:
+  - type: markdown
+    attributes:
+      value: "### 🎯 Task Overview\nProvide a brief summary of the task."
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "📋 Description"
+      description: "Explain the task in detail, including any necessary context."
+      placeholder: "Describe the task..."
+    validations:
+      required: true
+      
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: "✅ Acceptance Criteria"
+      description: "List the criteria that define when the task is considered complete."
+      placeholder: "- Criteria 1\n- Criteria 2\n- Criteria 3"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: "📝 Additional Notes"
+      description: "Include any extra information or resources related to the task."
+      placeholder: "Any other relevant details..."
