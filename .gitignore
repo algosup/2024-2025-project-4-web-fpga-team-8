@@ -1,6 +1,6 @@
 # Uploaded SDF and Verilog files
-backend/uploads_sdf/
-backend/uploads_v/
+fpgasim/backend/uploads_sdf/
+fpgasim/backend/uploads_v/
 
 # Parsed output files (e.g. .json from SDF parsing)
 backend/parsed_sdf/
