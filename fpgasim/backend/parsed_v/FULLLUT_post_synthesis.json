@@ -1,0 +1,13 @@
+{
+    "module": "FULLLUT",
+    "inputs": [
+        "I4",
+        "I3",
+        "I2",
+        "I1"
+    ],
+    "outputs": [
+        "O1"
+    ],
+    "bel_type": "LUT"
+}

@@ -1,0 +1,14 @@
+{
+    "module": "flipflop_tb",
+    "inputs": [
+        "async_reset",
+        "reset",
+        "D",
+        "clk",
+        "sim_clk"
+    ],
+    "outputs": [
+        "Q"
+    ],
+    "bel_type": null
+}

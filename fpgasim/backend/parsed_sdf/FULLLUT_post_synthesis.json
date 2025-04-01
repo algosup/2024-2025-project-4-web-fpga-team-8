@@ -1,0 +1,93 @@
+{
+    "design": "FULLLUT",
+    "timescale": "1 ps",
+    "cells": [
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_I1_output_0_0_to_lut_O1_input_0_1",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 621.859,
+                    "typ": 621.859,
+                    "max": 621.859
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_I2_output_0_0_to_lut_O1_input_0_0",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 242.77,
+                    "typ": 242.77,
+                    "max": 242.77
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_I3_output_0_0_to_lut_O1_input_0_2",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 389.808,
+                    "typ": 389.808,
+                    "max": 389.808
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_I4_output_0_0_to_lut_O1_input_0_4",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 1921.19,
+                    "typ": 1921.19,
+                    "max": 1921.19
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_lut_O1_output_0_0_to_O1_input_0_0",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 1131.31,
+                    "typ": 1131.31,
+                    "max": 1131.31
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "LUT_K",
+            "instance": "lut_O1",
+            "delays": {
+                "IOPATH in[0] out": {
+                    "min": 152.0,
+                    "typ": 152.0,
+                    "max": 152.0
+                },
+                "IOPATH in[1] out": {
+                    "min": 152.0,
+                    "typ": 152.0,
+                    "max": 152.0
+                },
+                "IOPATH in[2] out": {
+                    "min": 150.0,
+                    "typ": 150.0,
+                    "max": 150.0
+                },
+                "IOPATH in[4] out": {
+                    "min": 118.0,
+                    "typ": 118.0,
+                    "max": 118.0
+                }
+            },
+            "constraints": {}
+        }
+    ]
+}

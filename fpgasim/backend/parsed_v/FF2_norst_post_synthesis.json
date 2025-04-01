@@ -1,0 +1,11 @@
+{
+    "module": "FF2_norst",
+    "inputs": [
+        "clk",
+        "D"
+    ],
+    "outputs": [
+        "Q"
+    ],
+    "bel_type": "Flip-Flop"
+}

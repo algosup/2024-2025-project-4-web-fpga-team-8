@@ -1,0 +1,118 @@
+{
+    "design": "FF1",
+    "timescale": "1 ps",
+    "cells": [
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_D_output_0_0_to_lut_$auto$rtlil.cc:2714:MuxGate$139_input_0_3",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 1693.56,
+                    "typ": 1693.56,
+                    "max": 1693.56
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_clk_output_0_0_to_latch_Q_clock_0_0",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 10.0,
+                    "typ": 10.0,
+                    "max": 10.0
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_async_reset_output_0_0_to_lut_$auto$rtlil.cc:2714:MuxGate$139_input_0_1",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 463.327,
+                    "typ": 463.327,
+                    "max": 463.327
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_latch_Q_output_0_0_to_lut_$auto$rtlil.cc:2714:MuxGate$139_input_0_2",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 0.0,
+                    "typ": 0.0,
+                    "max": 0.0
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_latch_Q_output_0_0_to_Q_input_0_0",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 2304.7,
+                    "typ": 2304.7,
+                    "max": 2304.7
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "fpga_interconnect",
+            "instance": "routing_segment_lut_$auto$rtlil.cc:2714:MuxGate$139_output_0_0_to_latch_Q_input_0_0",
+            "delays": {
+                "IOPATH datain dataout": {
+                    "min": 96.0,
+                    "typ": 96.0,
+                    "max": 96.0
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "LUT_K",
+            "instance": "lut_$auto$rtlil.cc:2714:MuxGate$139",
+            "delays": {
+                "IOPATH in[1] out": {
+                    "min": 152.0,
+                    "typ": 152.0,
+                    "max": 152.0
+                },
+                "IOPATH in[2] out": {
+                    "min": 150.0,
+                    "typ": 150.0,
+                    "max": 150.0
+                },
+                "IOPATH in[3] out": {
+                    "min": 150.0,
+                    "typ": 150.0,
+                    "max": 150.0
+                }
+            },
+            "constraints": {}
+        },
+        {
+            "cell_type": "DFF",
+            "instance": "latch_Q",
+            "delays": {
+                "IOPATH (posedge clock) Q": {
+                    "min": 303.0,
+                    "typ": 303.0,
+                    "max": 303.0
+                }
+            },
+            "constraints": {
+                "SETUP D (posedge clock)": {
+                    "min": -46.0,
+                    "typ": -46.0,
+                    "max": -46.0
+                }
+            }
+        }
+    ]
+}
