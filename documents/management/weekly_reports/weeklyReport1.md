@@ -15,11 +15,10 @@ Created by: Quentin CLÉMENT <br> Creation Date: 24/02/2025 <br> Last Update: 07
 - [1. Overall Project Status Summary](#1-overall-project-status-summary)
 - [2. Milestones Met This Week](#2-milestones-met-this-week)
 - [3. Timeline Status](#3-timeline-status)
-- [4. Absenteeism Report](#4-absenteeism-report)
-- [5. Scope Status](#5-scope-status)
-- [6. Work Accomplished](#6-work-accomplished)
-- [7. Next Steps](#7-next-steps)
-- [8. Team Feedback](#8-team-feedback)
+- [4. Scope Status](#4-scope-status)
+- [5. Work Accomplished](#5-work-accomplished)
+- [6. Next Steps](#6-next-steps)
+- [7. Team Feedback](#7-team-feedback)
 
 </details>
 
@@ -39,16 +38,11 @@ Despite these setbacks, the technical team began analyzing different technologie
 
 As of now, we are still on schedule. However, we must remain vigilant and take proactive measures to address absenteeism to avoid potential delays. The deadline for delivering **Functional Specifications v1.0** is set for **Thursday, March 13th**, and we are on track to meet this deadline.  
 
-## 4. Absenteeism Report
-
-- **24/02: Mariem ZAIANE, Pavlo PRENDI**  
-- **25/02: Mariem ZAIANE**  
-
-## 5. Scope Status
+## 4. Scope Status
 
 Since the full team has not yet convened, the project scope is still undefined. This will be a key agenda point for our upcoming meeting.  
 
-## 6. Work Accomplished  
+## 5. Work Accomplished  
 
 ➭ <ins>**Project Setup**<ins>:  
 
@@ -64,13 +58,13 @@ Since the full team has not yet convened, the project scope is still undefined. 
 
 - ✅ **Technology selection** – _Victor LEROY, David CUAHONTE CUEVAS_  
 
-## 7. Next Steps  
+## 6. Next Steps  
 
 - 🧠 **06/03/2025**: **First meeting & brainstorming session** – _All team members_  
 - 📅 **Start drafting functional specifications** – _Mariem ZAIANE_  
 - 📝 **Begin drafting technical specifications** – _Victor LEROY_  
 - 📊 **Develop project management documentation** (_RACI matrix, risk management plan, Gantt chart_) – _Quentin CLÉMENT_  
 
-## 8. Team Feedback  
+## 7. Team Feedback  
 
 Overall, despite a rocky start due to absenteeism, the team remains motivated and determined to get the project on track. The technical team made significant progress by evaluating potential technologies, ensuring a strong foundation for discussions in the next meeting.  
