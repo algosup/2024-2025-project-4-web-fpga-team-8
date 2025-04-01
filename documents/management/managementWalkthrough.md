@@ -29,7 +29,7 @@ If you're new to the project or reviewing our progress, this walkthrough is the 
 We chose to manage both our **technical tasks and project documentation** using GitHub — a platform already central to our development workflow.
 
 - [GitHub Issues](https://github.com/algosup/2024-2025-project-4-web-fpga-team-8/issues) helped us track each deliverable or challenge as a ticket, with clear ownership and progress visibility.
-- The [GitHub Project Board](https://github.com/orgs/algosup/projects/59) was structured by week, giving us a shared view of what was planned, in progress, or done.
+- The [GitHub Project Board](https://github.com/orgs/algosup/projects/59) gave us a shared view of what was planned, in progress, or done.
 
 These tools enabled the team to stay in sync across frontend, backend, and documentation tasks, especially during critical phases like parser integration and MVP assembly.
 
