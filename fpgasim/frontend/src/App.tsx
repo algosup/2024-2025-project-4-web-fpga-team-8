@@ -5,7 +5,7 @@ import FPGALayout from "./components/FPGALayout";
 import ModuleInfo from "./components/ModuleInfo";
 import { ModuleData } from "./types";
 
-const API_URL = "http://127.0.0.1:5000";
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Main application component that loads FPGA modules and renders the UI
 function App(): React.JSX.Element {
