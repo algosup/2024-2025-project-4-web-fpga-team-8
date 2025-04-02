@@ -51,7 +51,7 @@ It also shows how the three test sets and the core technical modules (e.g. Veril
 
 ### 2.2 KPI Dashboard
 
-After seeing the schedule, the [KPI Dashboard](/documents/management/KPIs.pdf) gives you insight into how things actually progressed.  
+After seeing the schedule, the [KPI Dashboard](/documents/management/managementArtifacts/KPIs.pdf) gives you insight into how things actually progressed.  
 Each row represents a feature or deliverable, and the columns show **weekly progress** — both planned and actual.
 
 From parsing scripts to frontend integration, these KPIs helped us stay grounded, and offered a quantifiable way to report on progress in our weekly updates.
@@ -60,7 +60,7 @@ From parsing scripts to frontend integration, these KPIs helped us stay grounded
 
 ### 2.3 RACI Matrix
 
-The [RACI Matrix](/documents/management/raciMatrix.pdf) answers the question:  
+The [RACI Matrix](/documents/management/managementArtifacts/raciMatrix.pdf) answers the question:  
 **“Who’s doing what?”**
 
 For each major activity — whether technical, planning-related, or documentation-based — this matrix clarifies:
@@ -77,14 +77,14 @@ This helped avoid confusion around ownership, especially during parallel task ex
 
 Like any ambitious technical project, Web FPGA came with its share of uncertainties — parser accuracy, integration bugs, and animation timing, to name a few.
 
-The [Risk Management Plan](/documents/management/riskManagementPlan.md) explains how we approached risk from the start:  
+The [Risk Management Plan](/documents/management/managementArtifacts/riskManagementPlan.md) explains how we approached risk from the start:  
 How we categorized risks, how we rated their severity, and how we decided what to prevent, reduce, accept, or monitor over time.
 
 ---
 
 ### 2.5 Risk Register
 
-The [Risk Register](/documents/management/riskRegister.pdf) brings that strategy to life.  
+The [Risk Register](/documents/management/managementArtifacts/riskRegister.pdf) brings that strategy to life.  
 It lists all identified risks — from tight deadlines to malformed Verilog files — along with:
 
 - Their probability and potential impact  
@@ -98,7 +98,7 @@ This register was reviewed and updated throughout the project, especially during
 
 ### 2.6 Weekly Reports
 
-Finally, the [Weekly Reports](/documents/management/weekly_reports/) act as a diary of our journey through the project.  
+Finally, the [Weekly Reports](/documents/management/managementArtifacts/weekly_reports/) act as a diary of our journey through the project.  
 Each report includes:
 
 - What we achieved that week  
