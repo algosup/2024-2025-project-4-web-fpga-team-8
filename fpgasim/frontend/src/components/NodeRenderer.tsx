@@ -18,8 +18,9 @@ export function renderNodes(
     const xCoord = match ? parseInt(match[1], 10) : index % cols;
     const yCoord = match ? parseInt(match[2], 10) : Math.floor(index / cols);
 
-    const x = xCoord * cellSize;
-    const y = yCoord * cellSize;
+    const spacingFactor = 1.2;
+    const x = xCoord * cellSize * spacingFactor;
+    const y = yCoord * cellSize * spacingFactor;
     const isActive = index === currentStep;
 
     const group = nodeGroup
@@ -51,9 +52,11 @@ export function renderNodes(
         .append("text")
         .text("Active")
         .attr("text-anchor", "middle")
-        .attr("dy", cellSize / 2 + 12)
-        .style("font-size", "10px")
-        .style("fill", "#333");
+        .attr("dy", cellSize / 2 + 16)
+        .style("font-size", `${cellSize / 3.2}px`)
+        .style("font-weight", "600")
+        .style("fill", "#222")
+        .style("background", "transparent");
     }
   });
 }

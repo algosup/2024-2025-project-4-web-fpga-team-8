@@ -27,10 +27,12 @@ export function renderArrows(
       ? [parseInt(toMatch[1], 10), parseInt(toMatch[2], 10)]
       : [to.index % cols, Math.floor(to.index / cols)];
 
-    const fromX = fromXGrid * cellSize + cellSize / 2;
-    const fromY = fromYGrid * cellSize + cellSize / 2;
-    const toX = toXGrid * cellSize + cellSize / 2;
-    const toY = toYGrid * cellSize + cellSize / 2;
+    const spacingFactor = 1.2;
+
+    const fromX = fromXGrid * cellSize * spacingFactor + cellSize / 2;
+    const fromY = fromYGrid * cellSize * spacingFactor + cellSize / 2;
+    const toX = toXGrid * cellSize * spacingFactor + cellSize / 2;
+    const toY = toYGrid * cellSize * spacingFactor + cellSize / 2;
 
     arrowGroup
       .append("line")

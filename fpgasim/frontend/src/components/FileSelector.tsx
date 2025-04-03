@@ -12,8 +12,8 @@ function FileSelector({ moduleNames, onSelect }: Props) {
 
   const handleChange = (e: SelectChangeEvent<string>) => {
     const value = e.target.value;
-    setSelected(value);        // Update local UI state
-    onSelect(value);           // Notify parent of selection change
+    setSelected(value); // Update local UI state
+    onSelect(value); // Notify parent of selection change
   };
 
   return (
@@ -23,11 +23,13 @@ function FileSelector({ moduleNames, onSelect }: Props) {
         <MenuItem value="" disabled>
           Select a module
         </MenuItem>
-        {moduleNames.map((name) => (
-          <MenuItem key={name} value={name}>
-            {name}
-          </MenuItem>
-        ))}
+        {moduleNames
+          .filter((name) => ["FF1", "FF1_norst", "LUT"].includes(name))
+          .map((name) => (
+            <MenuItem key={name} value={name}>
+              {name}
+            </MenuItem>
+          ))}
       </Select>
     </Container>
   );

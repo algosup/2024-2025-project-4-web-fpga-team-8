@@ -7,12 +7,14 @@ export function renderGrid(
   rows: number,
   cellSize: number
 ) {
+  const spacingFactor = 1.2;
+
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       gridGroup
         .append("rect")
-        .attr("x", i * cellSize)
-        .attr("y", j * cellSize)
+        .attr("x", i * cellSize * spacingFactor)
+        .attr("y", j * cellSize * spacingFactor)
         .attr("width", cellSize)
         .attr("height", cellSize)
         .attr("stroke", "black")

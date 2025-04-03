@@ -77,13 +77,17 @@ function FPGALayout({ module }: Props) {
       .attr("d", "M0,-5L10,0L0,5")
       .attr("fill", "#888");
 
-    const containerWidth = containerRef.current.clientWidth;
-    const maxGridWidth = 750;
-    const width = Math.min(containerWidth, maxGridWidth);
-    const cols = 10;
-    const rows = 10;
-    const cellSize = (width / cols) * zoomLevel;
-    const height = cellSize * rows;
+      const containerWidth = containerRef.current.clientWidth;
+      const maxGridWidth = 1000;
+      const spacingFactor = 1.2; 
+      const cols = 20;
+      const rows = 20;
+      
+      const cellSize = (Math.min(containerWidth, maxGridWidth) / (cols * spacingFactor)) * zoomLevel;
+      
+      const width = cellSize * cols * spacingFactor;
+      const height = cellSize * rows * spacingFactor;
+      
 
     svg.attr("width", width).attr("height", height);
 
@@ -102,7 +106,10 @@ function FPGALayout({ module }: Props) {
 
   return (
     <div style={{ position: "relative", padding: "20px" }}>
-      <Legend showLegend={showLegend} onToggle={() => setShowLegend(!showLegend)} />
+      <Legend
+        showLegend={showLegend}
+        onToggle={() => setShowLegend(!showLegend)}
+      />
 
       <PlaybackControls
         isPlaying={isPlaying}
@@ -128,17 +135,16 @@ function FPGALayout({ module }: Props) {
       <div
         ref={containerRef}
         style={{
+          maxWidth: "100%",
           display: "flex",
+          overflowX: "auto",
+          overflowY: "hidden",
           justifyContent: "center",
-          marginTop: "20px",
         }}
       >
         <svg
           ref={svgRef}
           style={{
-            width: "100%",
-            maxWidth: "750px",
-            height: "auto",
             display: "block",
           }}
         />
